@@ -1,0 +1,99 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/principal}" 
+      th:with="titulo='Transação em conta'">
+  <body>
+    <div layout:fragment="conteudo">
+      <div th:if="${conta == null}">
+        <form th:action="@{/transacoes/selecionar}" method="POST">
+          <div th:if="${session.usuario != null and session.usuario.admin}">
+            <label for="nuConta">Selecione uma conta</label>
+            <select id="nuConta" name="nuConta" class="form-select" required>
+              <option value="">-- Escolha uma conta --</option>
+              <option th:each="c : ${todasContas}"
+                      th:value="${c.id}"
+                      th:text="${c.numero + ' - ' + c.descricao}"></option>
+            </select>
+          </div>
+          <div th:if="${session.usuario != null and !session.usuario.admin}">
+            <label for="nuConta">Selecione uma conta</label>
+            <select id="nuConta" name="nuConta" class="form-select" required>
+              <option value="">-- Escolha uma conta --</option>
+              <option th:each="c : ${contasDoUsuario}"
+                      th:value="${c.id}"
+                      th:text="${c.numero + ' - ' + c.descricao}"></option>
+            </select>
+          </div>
+          
+          <br />
+          <button type="submit" class="btn btn-primary" name="acao" value="nova">Nova Transação</button>
+          <button type="submit" class="btn btn-secondary" name="acao" value="listar">Listar Transações</button>
+        </form>
+        
+        <p th:if="${mensagem != null}" class="alert alert-warning" th:text="${mensagem}"></p>
+        
+        <!-- Mensagem quando não há contas -->
+        <div th:if="${(session.usuario.admin and (todasContas == null or todasContas.empty)) or 
+                      (!session.usuario.admin and (contasDoUsuario == null or contasDoUsuario.empty))}"
+             class="alert alert-info">
+          Nenhuma conta disponível
+        </div>
+      </div>
+      <div th:if="${conta != null}">
+        <ul>
+          <li><strong>Conta:</strong> <span th:text="${conta.numero}"></span></li>
+          <li><strong>Correntista:</strong> <span th:text="${conta.correntista.nome}"></span></li>
+          <li><strong>Descrição:</strong> <span th:text="${conta.descricao}"></span></li>
+          <li><strong>Tipo:</strong> <span th:text="${conta.tipo}"></span></li>
+          <li><strong>Dia Fechamento:</strong> <span th:text="${conta.diaFechamento} ?: '–'"></span></li>
+        </ul>
+
+        <div style="margin-bottom: 30px"></div>
+
+        <h4 th:text="${transacao.id != null} ? 'Editar Transação' : 'Nova Transação'"></h4>
+        <hr class="mb-4" />
+
+        <form th:action="@{/transacoes/salvar}" method="POST" th:object="${transacao}">
+          <input type="hidden" th:field="*{id}" />
+          <input type="hidden" th:field="*{conta.id}" name="idConta" />
+
+          <div class="form-group mb-2">
+            <label for="descricao">Descrição</label>
+            <input type="text" class="form-control" th:field="*{descricao}" required />
+          </div>
+
+          <div class="form-group mb-2">
+            <label for="data">Data</label>
+            <input type="date" class="form-control" th:field="*{data}" required />
+          </div>
+
+          <div class="form-group mb-2">
+            <label for="valor">Valor</label>
+            <input type="number" class="form-control" th:field="*{valor}" step="0.01" required />
+          </div>
+
+          <div class="form-group mb-2">
+            <label for="movimento">Movimento</label>
+            <select class="form-control" th:field="*{movimento}">
+              <option value="CREDITO">Crédito</option>
+              <option value="DEBITO">Débito</option>
+            </select>
+          </div>
+
+          <div class="form-group mb-2">
+            <label for="categoria">Categoria</label>
+            <select class="form-select" th:field="*{categoria.id}">
+              <option th:each="cat : ${categorias}" 
+                      th:value="${cat.id}" 
+                      th:text="${cat.nome} + ' (' + ${cat.natureza} + ')'"></option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Salvar Transação</button>
+          
+          <a th:href="@{/transacoes/listar/{id}(id=${transacao.conta.id})}" 
+             class="btn btn-secondary ms-2">Cancelar</a>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
