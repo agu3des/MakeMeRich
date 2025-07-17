@@ -1,0 +1,25 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/principal}" th:with="titulo='Nova Categoria'">
+  <body>
+    <div layout:fragment="conteudo">
+
+        <form th:action="@{/categorias}" th:object="${categoria}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="nome">Nome</label>
+        <input type="text" th:field="*{nome}" class="form-control" />
+
+        <label for="natureza">Natureza</label>
+        <select th:field="*{natureza}" class="form-select">
+            <option th:each="n : ${naturezas}" th:value="${n}" th:text="${n}"></option>
+        </select>
+
+        <label for="ordem">Ordem</label>
+        <input type="number" th:field="*{ordem}" class="form-control" />
+
+        <button class="btn btn-primary mt-2">Salvar</button>
+        <a th:href="@{/categorias}" class="btn btn-secondary mt-2">Cancelar</a>
+        </form>
+
+    </div>
+  </body>
+</html>
