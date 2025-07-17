@@ -1,0 +1,31 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/principal}" th:with="titulo='Novo Correntista'">
+  <body>
+    <div layout:fragment="conteudo">
+        <a class="btn btn-primary" th:href="@{/categorias/form}">Nova Categoria</a>
+        <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+            <th>Nome</th>
+            <th>Natureza</th>
+            <th>Ordem</th>
+            <th>Ativa?</th>
+            <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cat : ${categorias}">
+            <td th:text="${cat.nome}"></td>
+            <td th:text="${cat.natureza}"></td>
+            <td th:text="${cat.ordem}"></td>
+            <td th:text="${cat.ativa ? 'Sim' : 'Não'}"></td>
+            <td>
+                <a th:href="@{/categorias/{id}(id=${cat.id})}" class="btn btn-sm btn-warning">Editar</a>
+                <a th:href="@{/categorias/{id}/desativar(id=${cat.id})}" class="btn btn-sm btn-danger"
+                th:if="${cat.ativa}">Desativar</a>
+            </td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+  </body>
+</html>
