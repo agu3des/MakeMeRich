@@ -1,0 +1,29 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/principal}" th:with="titulo='Home'">
+  <body>
+    <div layout:fragment="conteudo">
+      <p>Este é o MakeMeRich, sua página de controle financeiro.</p>
+
+      <div>Como administrador, você poderá:</div>
+      <ul>
+        <li>
+          Adicionar ou consultar correntistas cadastrados use o menu
+          <strong>Correntistas</strong>
+        </li>
+        <li>
+          Adicionar ou consultar contas cadastradas use o menu
+          <strong>Contas</strong>
+        </li>
+        <li>Criar/editar/desativar categorias</li>
+      </ul>
+      <div>Como cliente, você poderá:</div>
+      <ul>
+        <li>Criar uma conta corrente ou cartão de crédito</li>
+        <li>Criar transações (crédito ou débito) em suas contas</li>
+        <li>Editar transações já existentes</li>
+        <li>Adicionar comentários a uma transação</li>
+        <li>Ver o extrato da sua conta</li>
+        <li>Ver a planilha com o orçamento anual</li>
+      </ul>
+    </div>
+  </body>
+</html>
