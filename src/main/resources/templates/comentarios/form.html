@@ -1,0 +1,17 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/principal}" th:with="titulo='Formulário de Comentário'">
+  <body>
+    <div layout:fragment="conteudo">
+      <form th:action="@{/comentarios/salvar}" method="post" th:object="${comentario}">
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{transacao.id}" />
+        <div class="form-group">
+          <label for="texto">Texto</label>
+          <textarea id="texto" th:field="*{texto}" class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a th:href="@{/comentarios/listar/{id}(id=${comentario.transacao.id})}" class="btn btn-secondary">Cancelar</a>
+      </form>
+    </div>
+  </body>
+</html>

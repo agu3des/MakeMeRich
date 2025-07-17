@@ -1,0 +1,28 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/principal}" th:with="titulo='Comentários da transação'">
+  <body>
+    <div layout:fragment="conteudo">
+      <h3 th:text="'Comentários para a transação: ' + ${transacao.descricao}"></h3>
+      <table class="table">
+        <thead>
+          <tr><th>Texto</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="comentario : ${comentarios}">
+            <td th:text="${comentario.texto}"></td>
+            <td>
+              <a th:href="@{/comentarios/editar/{id}(id=${comentario.id})}" class="btn btn-sm btn-warning">Editar</a>
+              <a th:href="@{/comentarios/excluir/{id}(id=${comentario.id})}" class="btn btn-sm btn-danger"
+                 onclick="return confirm('Confirma exclusão?');">Excluir</a>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(comentarios)}">
+            <td colspan="2">Nenhum comentário encontrado.</td>
+          </tr>
+        </tbody>
+      </table>
+      <a th:href="@{/comentarios/novo/{id}(id=${transacao.id})}" class="btn btn-primary">Adicionar Comentário</a>
+      <a th:href="@{/transacoes/listar/{id}(id=${transacao.conta.id})}" class="btn btn-secondary">Voltar</a>
+    </div>
+  </body>
+</html>
