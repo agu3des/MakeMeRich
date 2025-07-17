@@ -1,0 +1,70 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorate="~{layouts/principal}" th:with="titulo='Contas'">
+  <body>
+    <div layout:fragment="conteudo">
+
+      <form th:action="@{/contas/form}" method="GET" 
+        th:if="${session.usuario != null}">
+        <button class="btn btn-primary" type="submit">Nova Conta</button>
+      </form>
+      <br />
+
+      <div th:if="${not #lists.isEmpty(contas)}">
+        <div th:text="'Total ' + ${#lists.size(contas)} + ' registros'" 
+             style="text-align: right; color: gray; font-size: 0.85em" />
+
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Descrição</th>
+              <th>Correntista</th>
+              <th>Tipo</th>
+              <th style="text-align: center">Dia Fechamento</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="conta : ${contas}">
+              <td>
+                <a th:href="@{/contas/{id}(id=${conta.id})}" th:text="${conta.numero}"></a>
+              </td>
+
+              <td th:text="${conta.descricao}">[descrição]</td>
+
+              <td th:text="${conta.correntista.nome}">[nome]</td>
+
+              <td>
+                <span th:if="${conta.tipo == 'CARTAO'}" class="badge bg-warning text-dark">Cartão</span>
+                <span th:if="${conta.tipo == 'CORRENTE'}" class="badge bg-primary">Corrente</span>
+              </td>
+
+              <td style="text-align: center">
+                <span th:if="${conta.tipo == 'CARTAO'}" th:text="${conta.diaFechamento}">[fechamento]</span>
+                <span th:if="${conta.tipo != 'CARTAO'}">–</span>
+              </td>
+
+              <td>
+                <div class="d-flex gap-1">
+                <a th:href="@{/transacoes/listar/{id}(id=${conta.id})}" class="btn btn-outline-success btn-sm">Listar Transações</a>
+
+                  <a th:href="@{/transacoes/nova/{id}(id=${conta.id})}" class="btn btn-outline-primary btn-sm">Nova Transação</a>
+
+                  <!-- Exclusão apenas para admin -->
+                  <form th:action="@{/contas/{id}/delete(id=${conta.id})}" method="GET" 
+                    th:if="${session.usuario != null and session.usuario.admin}">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Excluir</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div th:if="${#lists.isEmpty(contas)}" class="alert alert-info">
+        Nenhuma conta cadastrada.
+      </div>
+    </div>
+  </body>
+</html>
