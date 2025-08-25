@@ -1,3 +1,8 @@
+// Função	        Método	                    Descrição
+// Hash de senha	hashPassword(String)	    Gera hash seguro para armazenar no banco.
+// Verificação	    checkPass(String, String)	Compara senha digitada com o hash salvo.
+
+
 package br.edu.ifpb.pweb2.makemerich.util;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -14,10 +19,11 @@ public abstract class PasswordUtil {
             return false;
     }
 
-    public static void main(String[] args) {
-        String senha = "123";
-        System.out.println(PasswordUtil.hashPassword(senha));
-    }
+    // Teste rápido para verificação local
+    // public static void main(String[] args) {
+    //     String senha = "123";
+    //     System.out.println(PasswordUtil.hashPassword(senha));
+    // }
 
 
 }
