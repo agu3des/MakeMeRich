@@ -2,11 +2,7 @@ package br.edu.ifpb.pweb2.makemerich.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,14 +25,14 @@ public class CategoriaController {
     }
 
     @GetMapping("/form")
-    public ModelAndView form(Categoria categoria) {
+    public ModelAndView form() {
         ModelAndView mav = new ModelAndView("categorias/form");
-        mav.addObject("categoria", categoria);
+        mav.addObject("categoria", new Categoria());
         return mav;
     }
 
     @PostMapping
-    public String salvar(Categoria categoria, RedirectAttributes attr) {
+    public String salvar(@ModelAttribute Categoria categoria, RedirectAttributes attr) {
         categoriaService.salvar(categoria);
         attr.addFlashAttribute("mensagem", "Categoria salva com sucesso!");
         return "redirect:/categorias";
@@ -44,8 +40,10 @@ public class CategoriaController {
 
     @GetMapping("/{id}")
     public ModelAndView editar(@PathVariable Long id) {
-        Categoria categoria = categoriaService.buscarPorId(id);
-        return form(categoria);
+        Categoria categoria = categoriaService.findByIdCategoria(id);
+        ModelAndView mav = new ModelAndView("categorias/form");
+        mav.addObject("categoria", categoria);
+        return mav;
     }
 
     @GetMapping("/{id}/desativar")
