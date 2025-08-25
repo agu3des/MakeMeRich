@@ -21,7 +21,7 @@ public class ComentarioService {
     }
 
     // Buscar por id
-    public Comentario buscarPorId(Integer id) {
+    public Comentario findByIdComentario(Integer id) {
         Optional<Comentario> opt = comentarioRepository.findById(id);
         return opt.orElseThrow(() -> new RuntimeException("Comentário não encontrado com id: " + id));
     }
