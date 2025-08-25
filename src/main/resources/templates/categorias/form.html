@@ -1,24 +1,33 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/principal}" th:with="titulo='Nova Categoria'">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{layouts/principal}" 
+      th:with="titulo='Nova Categoria'">
   <body>
-    <div layout:fragment="conteudo">
+    <div layout:fragment="conteudo" class="container py-3" style="max-width: 500px;">
 
-        <form th:action="@{/categorias}" th:object="${categoria}" method="post">
+      <form th:action="@{/categorias}" th:object="${categoria}" method="post" novalidate>
         <input type="hidden" th:field="*{id}" />
 
-        <label for="nome">Nome</label>
-        <input type="text" th:field="*{nome}" class="form-control" />
+        <div class="mb-3">
+          <label for="nome" class="form-label fw-semibold text-success">Nome</label>
+          <input type="text" th:field="*{nome}" id="nome" class="form-control border-success" placeholder="Digite o nome da categoria" required />
+        </div>
 
-        <label for="natureza">Natureza</label>
-        <select th:field="*{natureza}" class="form-select">
+        <div class="mb-3">
+          <label for="natureza" class="form-label fw-semibold text-success">Natureza</label>
+          <select th:field="*{natureza}" id="natureza" class="form-select border-success" required>
+            <option value="" disabled selected>Selecione a natureza</option>
             <option th:each="n : ${naturezas}" th:value="${n}" th:text="${n}"></option>
-        </select>
+          </select>
+        </div>
 
-        <label for="ordem">Ordem</label>
-        <input type="number" th:field="*{ordem}" class="form-control" />
+        <div class="mb-3">
+          <label for="ordem" class="form-label fw-semibold text-success">Ordem</label>
+          <input type="number" th:field="*{ordem}" id="ordem" class="form-control border-success" placeholder="Informe a ordem" min="0" required />
+        </div>
 
-        <button class="btn btn-primary mt-2">Salvar</button>
-        <a th:href="@{/categorias}" class="btn btn-secondary mt-2">Cancelar</a>
-        </form>
+        <button type="submit" class="btn btn-success me-2">Salvar</button>
+        <a th:href="@{/categorias}" class="btn btn-outline-success">Cancelar</a>
+      </form>
 
     </div>
   </body>

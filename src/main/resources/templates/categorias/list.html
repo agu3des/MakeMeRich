@@ -1,31 +1,49 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/principal}" th:with="titulo='Novo Correntista'">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{layouts/principal}" th:with="titulo='Categorias'">
   <body>
-    <div layout:fragment="conteudo">
-        <a class="btn btn-primary" th:href="@{/categorias/form}">Nova Categoria</a>
-        <table class="table table-striped mt-3">
-        <thead>
+    <div layout:fragment="conteudo" class="container py-3">
+
+      <a class="btn btn-success mb-3" th:href="@{/categorias/form}">
+        <i class="bi bi-plus-circle me-1"></i> 
+      </a>
+
+      <div class="table-responsive shadow-sm border border-success rounded">
+        <table class="table table-striped table-hover align-middle mb-0">
+          <thead class="table-success">
             <tr>
-            <th>Nome</th>
-            <th>Natureza</th>
-            <th>Ordem</th>
-            <th>Ativa?</th>
-            <th>Ações</th>
+              <th>Nome</th>
+              <th>Natureza</th>
+              <th>Ordem</th>
+              <th>Ativa?</th>
+              <th style="width: 150px;">Ações</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             <tr th:each="cat : ${categorias}">
-            <td th:text="${cat.nome}"></td>
-            <td th:text="${cat.natureza}"></td>
-            <td th:text="${cat.ordem}"></td>
-            <td th:text="${cat.ativa ? 'Sim' : 'Não'}"></td>
-            <td>
-                <a th:href="@{/categorias/{id}(id=${cat.id})}" class="btn btn-sm btn-warning">Editar</a>
-                <a th:href="@{/categorias/{id}/desativar(id=${cat.id})}" class="btn btn-sm btn-danger"
-                th:if="${cat.ativa}">Desativar</a>
-            </td>
+              <td th:text="${cat.nome}"></td>
+              <td th:text="${cat.natureza}"></td>
+              <td th:text="${cat.ordem}"></td>
+              <td>
+                <span th:text="${cat.ativa ? 'Sim' : 'Não'}" 
+                      th:classappend="${cat.ativa} ? 'text-success fw-semibold' : 'text-danger fw-semibold'"></span>
+              </td>
+              <td>
+                <a th:href="@{/categorias/{id}(id=${cat.id})}" 
+                   class="btn btn-sm btn-warning me-2" title="Editar">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <a th:href="@{/categorias/{id}/desativar(id=${cat.id})}" 
+                   class="btn btn-sm btn-danger" 
+                   th:if="${cat.ativa}"
+                   title="Desativar">
+                  <i class="bi bi-x-circle"></i>
+                </a>
+              </td>
             </tr>
-        </tbody>
+          </tbody>
         </table>
+      </div>
+
     </div>
   </body>
 </html>
