@@ -1,35 +1,100 @@
 .logo-bar {
-background-color: #a5cb98;
+  background-color: #a5cb98;
 }
-.logo-bar img {
-vertical-align: sub;
-margin-right: 5px;
+
+/* Aumentar o tamanho da logo */
+.logo-img {
+  vertical-align: start;
+  margin-right: 10px;
+  height: 50px; /* aumente conforme desejado */
 }
+
+/* Aumentar o tamanho do título */
 .logo-font {
-font-family: 'Fugaz One', cursive;
-font-size: 1.3rem;
+  font-family: 'Fugaz One', cursive;
+  font-size: 2rem; /* aumentado */
+  color: #ffffff;
+  line-height: 1;
 }
+
+/* Espaçamento do conteúdo */
 .conteudo {
-margin-top: 40px;
+  margin-top: 40px;
+  padding: 20px;
 }
-.menu-bar {
-display: flex;
-justify-content: space-between; /* separa os dois blocos */
-align-items: center; /* alinha verticalmente */
-padding: 10px;
-background-color: #f0f0f0; /* opcional: cor de fundo */
+/* Barra de navegação principal */
+.navbar-custom {
+  background-color: #f0fdf4; /* verde bem claro */
+  border-bottom: 1px solid #cfe3d9;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  padding: 8px 16px;
 }
-.menu-links a {
-margin-right: 15px;
-text-decoration: none;
-color: #333;
+
+/* Container da navbar para alinhar itens */
+.navbar-custom .container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px; /* opcional, para espaçamento entre os dois blocos */
 }
+
+/* Informações do usuário (nome + botão) */
 .user-info {
-display: flex;
-align-items: center;
-gap: 10px; /* espaço entre email e botão */
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.logout-button {
-padding: 5px 10px;
-cursor: pointer;
+
+.user-email {
+  font-weight: 500;
+  color: #333;
+  font-size: 16px;
+}
+
+/* Menu de navegação alinhado horizontalmente */
+.navbar-nav.nav-pills {
+  display: flex;
+  flex-wrap: wrap; /* quebras em telas pequenas */
+  gap: 10px;       /* espaço entre botões */
+}
+
+/* Estilo dos links do menu */
+.nav-pills .nav-link {
+  color: #198754;
+  transition: background-color 0.3s, color 0.3s;
+  border: 1px solid transparent;
+  font-size: 0.95rem;
+  padding: 6px 12px;
+  border-radius: 9999px; /* deixa arredondado tipo 'pill' */
+}
+
+/* Hover */
+.nav-pills .nav-link:hover {
+  background-color: #d1e7dd;
+  color: #145c32;
+  border: 1px solid #bcd0c7;
+}
+
+/* Ativo */
+.nav-pills .nav-link.active {
+  background-color: #198754;
+  color: #fff !important;
+  font-weight: 600;
+  border: 1px solid #157347;
+}
+
+
+
+.btn-icon-sm {
+  height: 38px;
+  padding: 0 12px;
+  font-size: 1.2rem;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; 
+}
+
+.pagination .page-item:not(.disabled) .page-link {
+    color: green;
 }
