@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/principal}"
+      th:with="titulo='Orçamento Anual'">
+
+<head>
+  <style>
+    /* Estilos gerais */
+    .card-budget {
+      border: 1px solid #28a745;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.1);
+      margin-top: 20px;
+    }
+    
+    .card-header-budget {
+      background-color: #28a745;
+      color: white;
+      border-radius: 8px 8px 0 0 !important;
+      padding: 1rem 1.5rem;
+    }
+    
+    .table-budget {
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    
+    .table-budget th {
+      background-color: #d4edda;
+      color: #155724;
+      font-weight: 600;
+      text-align: center;
+      padding: 0.75rem;
+    }
+    
+    .table-budget td {
+      padding: 0.75rem;
+      border: 1px solid #e0e0e0 !important;
+    }
+    
+    .month-cell {
+      min-width: 80px;
+      text-align: center;
+    }
+    
+    .total-cell {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      text-align: right;
+    }
+    
+    .positive-value {
+      color: #28a745;
+      font-weight: 500;
+    }
+    
+    .negative-value {
+      color: #dc3545;
+      font-weight: 500;
+    }
+    
+    .badge-year {
+      background-color: #28a745;
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+    }
+    
+    .btn-refresh {
+      background-color: #28a745;
+      border-color: #28a745;
+      color: white;
+    }
+    
+    .btn-refresh:hover {
+      background-color: #218838;
+      border-color: #1e7e34;
+    }
+    
+    .empty-cell {
+      color: #6c757d;
+      font-style: italic;
+      text-align: center;
+    }
+    
+    .section-title {
+      color: #28a745;
+      border-left: 4px solid #28a745;
+      padding-left: 1rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    
+    .card-total {
+      background-color: #e8f5e9;
+      border-left: 4px solid #28a745;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      font-weight: 500;
+    }
+    
+    .form-select-year {
+      border: 1px solid #28a745;
+      border-radius: 4px;
+    }
+    
+    .btn-voltar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .header-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 15px;
+    }
+    
+    .natureza-section {
+      margin-bottom: 30px;
+    }
+    
+    .no-data {
+      text-align: center;
+      padding: 20px;
+      color: #6c757d;
+      font-style: italic;
+    }
+    
+    .debug-info {
+      background-color: #f8f9fa;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    
+    .total-mensal-row {
+      background-color: #e8f5e9;
+      font-weight: bold;
+    }
+    
+    .consolidado-geral-row {
+      background-color: #c8e6c9;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div layout:fragment="conteudo">
+    <div class="container py-4">
+      <div class="header-actions">
+        <form th:action="@{/contas/orcamento/anual}" method="get" class="d-flex align-items-center">
+          <div class="me-2">
+            <label class="form-label text-success fw-semibold">Ano:</label>
+          </div>
+          <select name="ano" class="form-select form-select-year me-2" style="width: 100px;">
+            <option th:each="anoOp : ${#numbers.sequence(ano-5, ano+1)}"
+                    th:value="${anoOp}"
+                    th:text="${anoOp}"
+                    th:selected="${anoOp == ano}"></option>
+          </select>
+
+          <div class="me-2" th:if="${isAdmin} ? (${exibirSelecaoCorrentista} ?: false) : false">
+            <label class="form-label text-success fw-semibold">Correntista:</label>
+          </div>
+          <select name="correntistaId" class="form-select form-select-year me-2"
+                  th:if="${isAdmin} ? (${exibirSelecaoCorrentista} ?: false) : false" style="min-width: 200px;">
+            <option th:each="c : ${correntistas}"
+                    th:value="${c.id}"
+                    th:text="${c.nome}"
+                    th:selected="${correntistaSelecionado != null} ? ${c.id == correntistaSelecionado.id} : false">
+        </option>
+            </option>
+          </select>
+          <button type="submit" class="btn btn-refresh">
+            <i class="bi bi-arrow-repeat"></i>
+          </button>
+        </form>
+
+        <div class="d-flex align-items-center">
+          <span class="badge badge-year">[[${ano}]]</span>
+        </div>
+      </div>
+
+      <div class="card card-budget">
+        <div class="card-header card-header-budget">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+              <i class="bi bi-graph-up me-2"></i>
+              Orçamento Anual Consolidado
+            </h4>
+            <div th:if="${correntistaSelecionado != null}">
+              <small class="text-white fw-light">
+                Correntista: <span th:text="${correntistaSelecionado.nome}"></span>
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <!-- Tabelas por natureza -->
+          <div th:each="natureza : ${T(br.edu.ifpb.pweb2.makemerich.model.Natureza).values()}" 
+               class="natureza-section">
+            <h5 class="section-title" th:text="${natureza} + 's'"></h5>
+            
+            <div th:if="${orcamentoPorNatureza?.get(natureza)?.size() > 0}">
+              <div class="table-responsive">
+                <table class="table table-bordered table-budget">
+                  <thead>
+                    <tr>
+                      <th>Categoria</th>
+                      <th th:each="nomeMes : ${nomesMeses}" 
+                          th:text="${nomeMes}" 
+                          class="text-center month-cell"></th>
+                      <th class="text-center total-cell">Total</th>
+                    </tr>
+                  </thead>
+                  
+                  <tbody>
+                   <!-- Linhas por categoria -->
+                    <tr th:each="categoriaEntry : ${orcamentoPorNatureza.get(natureza).entrySet()}">
+                      <td class="fw-semibold" th:text="${categoriaEntry.key.nome}"></td>
+                      
+                      <td th:each="mes : ${#numbers.sequence(1, 12)}" class="text-end">
+                        <span th:with="valor=${categoriaEntry.value.get(mes)}"
+                              th:class="${valor.signum() < 0 ? 'negative-value' : 'positive-value'}"
+                              th:text="${#numbers.formatCurrency(valor)}">
+                        </span>
+                      </td>
+                      
+                      <td class="text-end fw-bold total-cell">
+                        <span th:with="totalCategoria=${totaisPorNatureza.get(natureza).get(categoriaEntry.key)}"
+                              th:class="${totalCategoria.signum() < 0 ? 'negative-value' : 'positive-value'}"
+                              th:text="${#numbers.formatCurrency(totalCategoria)}">
+                        </span>
+                      </td>
+                    </tr>
+                  
+                    <!-- Linha de Total Mensal por Natureza -->
+                    <tr class="total-mensal-row">
+                      <td class="fw-bold">Total Mensal</td>
+                      
+                      <!-- Células para cada mês -->
+                      <td th:each="mes : ${#numbers.sequence(1, 12)}" class="text-end">
+                        <span th:with="totalMes=${totaisPorMesPorNatureza.get(natureza).get(mes)}"
+                              th:class="${totalMes.signum() < 0} ? 'negative-value' : 'positive-value'"
+                              th:text="${#numbers.formatCurrency(totalMes)}">
+                        </span>
+                      </td>
+                      
+                      <!-- Célula de total anual -->
+                      <td class="text-end fw-bold total-cell">
+                        <span th:class="${totalPorNatureza.get(natureza).signum() < 0 ? 'negative-value' : 'positive-value'}"
+                              th:text="${#numbers.formatCurrency(totalPorNatureza.get(natureza))}">
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <!-- Resumo por natureza -->
+              <div class="card-total">
+                <div class="d-flex justify-content-between">
+                    <span class="fw-semibold">Total de [[${natureza}]]s:</span>
+                    <span th:with="totalNatureza=${totalPorNatureza.get(natureza)}"
+                          th:class="${totalNatureza.signum() < 0} ? 'negative-value' : 'positive-value'"
+                          th:text="${#numbers.formatCurrency(totalNatureza)}">
+                    </span>
+                </div>
+              </div>
+            
+            <div th:unless="${orcamentoPorNatureza?.get(natureza)?.size() > 0}"
+                 class="no-data">
+              <i class="bi bi-info-circle"></i> Nenhum dado disponível para [[${natureza}]]s
+            </div>
+          </div>  
+        </div>
+      </div>
+    </div>
+    
+    <!-- Botão Voltar -->
+    <a th:href="@{/contas}" class="btn btn-success btn-voltar" title="Voltar">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+    
+    <script>
+      // Script para destacar a linha ao passar o mouse
+      document.addEventListener('DOMContentLoaded', function() {
+        var rows = document.querySelectorAll('.table-budget tbody tr');
+        rows.forEach(function(row) {
+          row.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#f1f8e9';
+          });
+          row.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '';
+          });
+        });
+      });
+    </script>
+  </div>
+</body>
+</html>
