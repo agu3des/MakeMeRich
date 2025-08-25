@@ -1,28 +1,50 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/principal}" th:with="titulo='Comentários da transação'">
   <body>
-    <div layout:fragment="conteudo">
-      <h3 th:text="'Comentários para a transação: ' + ${transacao.descricao}"></h3>
-      <table class="table">
-        <thead>
-          <tr><th>Texto</th><th>Ações</th></tr>
-        </thead>
-        <tbody>
-          <tr th:each="comentario : ${comentarios}">
-            <td th:text="${comentario.texto}"></td>
-            <td>
-              <a th:href="@{/comentarios/editar/{id}(id=${comentario.id})}" class="btn btn-sm btn-warning">Editar</a>
-              <a th:href="@{/comentarios/excluir/{id}(id=${comentario.id})}" class="btn btn-sm btn-danger"
-                 onclick="return confirm('Confirma exclusão?');">Excluir</a>
-            </td>
-          </tr>
-          <tr th:if="${#lists.isEmpty(comentarios)}">
-            <td colspan="2">Nenhum comentário encontrado.</td>
-          </tr>
-        </tbody>
-      </table>
-      <a th:href="@{/comentarios/novo/{id}(id=${transacao.id})}" class="btn btn-primary">Adicionar Comentário</a>
-      <a th:href="@{/transacoes/listar/{id}(id=${transacao.conta.id})}" class="btn btn-secondary">Voltar</a>
+    <div layout:fragment="conteudo" class="container py-3">
+
+      <h3 class="mb-4 text-success" th:text="'Comentários para a transação: ' + ${transacao.descricao}"></h3>
+
+      <div class="table-responsive shadow-sm border border-success rounded">
+        <table class="table table-hover align-middle mb-4">
+          <thead class="table-success">
+            <tr>
+              <th>Texto</th>
+              <th style="width: 140px;">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="comentario : ${comentarios}">
+              <td th:text="${comentario.texto}"></td>
+              <td>
+                <a th:href="@{/comentarios/editar/{id}(id=${comentario.id})}" 
+                  class="btn btn-sm btn-warning me-2" 
+                  title="Editar">
+                  <i class="bi bi-pencil-fill"></i>
+                </a>
+                <a th:href="@{/comentarios/excluir/{id}(id=${comentario.id})}" 
+                  class="btn btn-sm btn-danger" 
+                  onclick="return confirm('Confirma exclusão?');"
+                  title="Excluir">
+                  <i class="bi bi-trash-fill"></i>
+                </a>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(comentarios)}">
+              <td colspan="2" class="text-center text-muted fst-italic">Nenhum comentário encontrado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex gap-2 mt-2">
+        <a th:href="@{/comentarios/novo/{id}(id=${transacao.id})}" class="btn btn-success">
+          <i class="bi bi-plus-circle me-1"></i> 
+        </a>
+        <a th:href="@{/transacoes/listar/{id}(id=${transacao.conta.id})}" class="btn btn-secondary">
+          <i class="bi bi-arrow-left me-1"></i> 
+        </a>
+      </div>
     </div>
   </body>
 </html>
