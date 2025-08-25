@@ -12,7 +12,11 @@ import br.edu.ifpb.pweb2.makemerich.model.Correntista;
 
 @Repository
 public interface ContaRepository extends JpaRepository<Conta, Integer> {
+    
     List<Conta> findByCorrentista(Correntista correntista);
+
+    @Query("SELECT c FROM Conta c JOIN FETCH c.correntista")
+    List<Conta> findAllWithCorrentista();
 
     @Query("from Conta c left join fetch c.transacoes t where c.numero = :numero")
     Conta findByNumeroWithTransacoes(String numero);
@@ -21,12 +25,16 @@ public interface ContaRepository extends JpaRepository<Conta, Integer> {
     Conta findByIdWithTransacoes(Integer id);
 
     @Query("select distinct c from Conta c left join fetch c.transacoes t where c.id = :id")
-    Conta findDistinctByIdWithTransacoes(Integer id);
+    Conta findDistinctByIdWithTransacoes(@Param("id") Integer id);
 
     List<Conta> findByCorrentistaEmail(String email);
 
     @Query("SELECT c FROM Conta c LEFT JOIN FETCH c.transacoes t WHERE c.id = :id ORDER BY t.data DESC")
     Conta findByIdWithTransacoesOrdered(@Param("id") Integer id);
+
+    @Query(value="from Conta c left join fetch c.correntista ct where ct.user.username = :username")
+    List<Conta> findByUsername(@Param("username") String name);
+
 
 
 }

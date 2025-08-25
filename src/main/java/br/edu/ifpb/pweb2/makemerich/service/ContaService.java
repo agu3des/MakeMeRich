@@ -3,6 +3,8 @@ package br.edu.ifpb.pweb2.makemerich.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import br.edu.ifpb.pweb2.makemerich.model.Conta;
@@ -35,14 +37,13 @@ public class ContaService implements Service<Conta, Integer> {
         return contaRepository.save(conta);
     }
 
-    
     public Conta findByNumeroWithTransacoes(String nuConta){
         return contaRepository.findByNumeroWithTransacoes(nuConta);
 
     }
 
-    public Conta findByIdWithTransacoes(Integer idConta) {
-        return contaRepository.findByIdWithTransacoes(idConta);
+    public Conta findDistinctByIdWithTransacoes(Integer idConta) {
+        return contaRepository.findDistinctByIdWithTransacoes(idConta);
     }
 
     public List<Conta> findByCorrentistaEmail(String email) {
@@ -51,11 +52,23 @@ public class ContaService implements Service<Conta, Integer> {
 
     public void deleteById(Integer id) {
         contaRepository.deleteById(id);
-   }
+    }
 
-   public List<Conta> findByCorrentista(Correntista correntista) {
-    return contaRepository.findByCorrentista(correntista);
-}
+    public List<Conta> findByCorrentista(Correntista correntista) {
+        return contaRepository.findByCorrentista(correntista);
+    }
 
+    public List<Conta> findAllWithCorrentista() {
+        return contaRepository.findAllWithCorrentista();
+    }
 
+    public List<Conta> findByUsername(String username) {
+        return contaRepository.findByUsername(username);
+    }
+
+    @Override
+    public Page<Conta> findAll(Pageable p) {
+        return contaRepository.findAll(p);
+    }
+   
 }
