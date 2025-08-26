@@ -10,9 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,12 +34,14 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message="Campo obrigatório")
     private String nome;
 
     @NotNull(message = "Selecione a natureza")
     @Enumerated(EnumType.STRING)
     private Natureza natureza; // ENTRADA, SAIDA, INVESTIMENTO
 
+    @NotNull(message = "Informe a ordem")
     private Integer ordem;
 
     private boolean ativa = true; // usado para desativar sem excluir

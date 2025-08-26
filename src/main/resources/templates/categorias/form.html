@@ -10,6 +10,9 @@
         <div class="mb-3">
           <label for="nome" class="form-label fw-semibold text-success">Nome</label>
           <input type="text" th:field="*{nome}" id="nome" class="form-control border-success" placeholder="Digite o nome da categoria" required />
+          <div class="text-danger small" 
+               th:if="${#fields.hasErrors('nome')}" 
+               th:errors="*{nome}"></div>
         </div>
 
         <div class="mb-3">
@@ -18,11 +21,17 @@
             <option value="" disabled selected>Selecione a natureza</option>
             <option th:each="n : ${naturezas}" th:value="${n}" th:text="${n}"></option>
           </select>
+          <div class="text-danger small" 
+               th:if="${#fields.hasErrors('natureza')}" 
+               th:errors="*{natureza}"></div>
         </div>
 
         <div class="mb-3">
           <label for="ordem" class="form-label fw-semibold text-success">Ordem</label>
-          <input type="number" th:field="*{ordem}" id="ordem" class="form-control border-success" placeholder="Informe a ordem" min="0" required />
+          <input type="number" th:field="*{ordem}" id="ordem" class="form-control border-success" placeholder="Informe a ordem" min="1" required />
+          <div class="text-danger small" 
+               th:if="${#fields.hasErrors('ordem')}" 
+               th:errors="*{ordem}"></div>
         </div>
 
         <button type="submit" class="btn btn-success me-2">Salvar</button>
