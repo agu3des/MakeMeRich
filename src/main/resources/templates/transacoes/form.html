@@ -119,6 +119,7 @@
             <input type="hidden" name="categoria.natureza" id="natureza" th:value="*{categoria.natureza}" />
             <button type="button" id="btnEntrada" class="btn btn-outline-success me-2" onclick="selecionarNatureza('ENTRADA')">Entrada</button>
             <button type="button" id="btnSaida" class="btn btn-outline-danger" onclick="selecionarNatureza('SAIDA')">Saída</button>
+            <button type="button" id="btnInvestimento" class="btn btn-outline-warning" onclick="selecionarNatureza('INVESTIMENTO')">Investimento</button>
             <p th:if="${#fields.hasErrors('categoria.natureza')}" th:errors="*{categoria.natureza}" class="alert alert-danger"></p>
           </div>
 
@@ -157,17 +158,37 @@
 
           const btnEntrada = document.getElementById('btnEntrada');
           const btnSaida = document.getElementById('btnSaida');
+          const btnInvestimento = document.getElementById('btnInvestimento');
 
           if (naturezaSelecionada === 'ENTRADA') {
             btnEntrada.classList.remove('btn-outline-success');
             btnEntrada.classList.add('btn-success');
+            
             btnSaida.classList.remove('btn-danger');
             btnSaida.classList.add('btn-outline-danger');
-          } else {
-            btnSaida.classList.remove('btn-outline-danger');
-            btnSaida.classList.add('btn-danger');
+
+            btnInvestimento.classList.remove('btn-warning');
+            btnInvestimento.classList.add('btn-outline-warning');
+          } 
+          if (naturezaSelecionada === 'SAIDA') {
             btnEntrada.classList.remove('btn-success');
             btnEntrada.classList.add('btn-outline-success');
+
+            btnSaida.classList.remove('btn-outline-danger');
+            btnSaida.classList.add('btn-danger');
+
+            btnInvestimento.classList.remove('btn-warning');
+            btnInvestimento.classList.add('btn-outline-warning');
+          }
+          else {
+            btnEntrada.classList.remove('btn-success');
+            btnEntrada.classList.add('btn-outline-success');
+
+            btnSaida.classList.remove('btn-danger');
+            btnSaida.classList.add('btn-outline-danger');
+
+            btnInvestimento.classList.remove('btn-outline-warning');
+            btnInvestimento.classList.add('btn-warning');
           }
 
           const select = document.getElementById('categoria');
@@ -186,7 +207,6 @@
             }
           }
 
-          // Só altera selectedIndex se o valor atual não estiver visível
           const selectedValue = select.value;
           let selectedOptionVisible = false;
 
