@@ -15,13 +15,11 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    // Retorna todas as categorias ativas (pode filtrar ativa=true, se quiser)
     public List<Categoria> listarTodas() {
         return categoriaRepository.findAll();
     }
 
-    // Buscar por id
-    public Categoria buscarPorId(Long id) {
+    public Categoria findByIdCategoria(Long id) {
         Optional<Categoria> opt = categoriaRepository.findById(id);
         return opt.orElseThrow(() -> new RuntimeException("Categoria não encontrada com id: " + id));
     }
@@ -30,12 +28,10 @@ public class CategoriaService {
         return categoriaRepository.findByAtivaTrueOrderByNaturezaAscOrdemAsc();
     }
 
-    // Salvar nova categoria ou atualizar existente
     public Categoria salvar(Categoria categoria) {
         return categoriaRepository.save(categoria);
     }
 
-    // Desativar categoria
     public void desativar(Long id) {
         Categoria cat = categoriaRepository.findById(id).orElse(null);
         if (cat != null) {
