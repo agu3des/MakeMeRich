@@ -83,7 +83,7 @@ public class CorrentistaController {
     @GetMapping("/{id}")
     public ModelAndView getCorrentistaById(@PathVariable(value = "id") Integer id, ModelAndView model) {
         Correntista correntista = correntistaService.findById(id);
-        //TODO if (correntista != null && correntista.getUser() != null) {
+        // if (correntista != null && correntista.getUser() != null) {
         //     correntistaService.setAdmin(correntista);
         // }
         model.setViewName("correntistas/form");

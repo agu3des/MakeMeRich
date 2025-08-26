@@ -1,7 +1,12 @@
+select * from correntista;
+select * from conta;
+select * from transacao;
 
 -------------------------------------------------------
+/*correntistas*/
+
 INSERT INTO correntista (nome, email, ativo, username) VALUES
-('João da Silva', 'joao@makemerich.com', true, 'user1'),
+-- ('João da Silva', 'joao@makemerich.com', true, 'user1'),
 ('Maria Oliveira', 'maria@makemerich.com', true, 'user2'),
 ('Carlos Souza', 'carlos@makemerich.com', true, 'user3'),
 ('Ana Lima', 'ana@makemerich.com', true, 'user4'),
@@ -13,112 +18,112 @@ INSERT INTO correntista (nome, email, ativo, username) VALUES
 ('Beatriz Carvalho', 'beatriz@makemerich.com', true, 'user10');
 
 
-
+-------------------------------------------------------
 /*contas*/
 
 -- 1. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100111', 'Conta Corrente Principal', 'CORRENTE', NULL, 1);
+VALUES ('100111', 'Conta Corrente Principal', 'CORRENTE', NULL, 21);
 
 -- 2. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200000', 'Cartão Nubank', 'CARTAO', 10, 1);
+VALUES ('200000', 'Cartão Nubank', 'CARTAO', 10, 21);
 
 -- 3. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100234', 'Conta Universitária', 'CORRENTE', NULL, 2);
+VALUES ('100234', 'Conta Universitária', 'CORRENTE', NULL, 22);
 
 -- 4. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200245', 'Cartão Inter', 'CARTAO', 15, 2);
+VALUES ('200245', 'Cartão Inter', 'CARTAO', 15, 22);
 
 -- 5. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100355', 'Conta Poupança Família', 'CORRENTE', NULL, 3);
+VALUES ('100355', 'Conta Poupança Família', 'CORRENTE', NULL, 23);
 
 -- 6. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200365', 'Cartão Itaú Gold', 'CARTAO', 20, 3);
+VALUES ('200365', 'Cartão Itaú Gold', 'CARTAO', 20, 23);
 
 -- 7. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100477', 'Conta Empresa', 'CORRENTE', NULL, 4);
+VALUES ('100477', 'Conta Empresa', 'CORRENTE', NULL, 24);
 
 -- 8. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200488', 'Cartão C6 Bank', 'CARTAO', 12, 4);
+VALUES ('200488', 'Cartão C6 Bank', 'CARTAO', 12, 24);
 
 -- 9. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100599', 'Conta Conjunta', 'CORRENTE', NULL, 5);
+VALUES ('100599', 'Conta Conjunta', 'CORRENTE', NULL, 25);
 
 -- 10. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200500', 'Cartão Bradesco Prime', 'CARTAO', 28, 5);
+VALUES ('200500', 'Cartão Bradesco Prime', 'CARTAO', 28, 25);
 
 -- 11. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100610', 'Conta Digital Nubank', 'CORRENTE', NULL, 6);
+VALUES ('100610', 'Conta Digital Nubank', 'CORRENTE', NULL, 26);
 
 -- 12. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200600', 'Cartão Santander Free', 'CARTAO', 5, 6);
+VALUES ('200600', 'Cartão Santander Free', 'CARTAO', 5, 26);
 
 -- 13. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100700', 'Conta Poupança Ricardo', 'CORRENTE', NULL, 7);
+VALUES ('100700', 'Conta Poupança Ricardo', 'CORRENTE', NULL, 27);
 
 -- 14. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200700', 'Cartão XP Visa', 'CARTAO', 18, 7);
+VALUES ('200700', 'Cartão XP Visa', 'CARTAO', 18, 27);
 
 -- 15. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100800', 'Conta Salário Juliana', 'CORRENTE', NULL, 8);
+VALUES ('100800', 'Conta Salário Juliana', 'CORRENTE', NULL, 28);
 
 -- 16. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200800', 'Cartão Porto Seguro', 'CARTAO', 25, 8);
+VALUES ('200800', 'Cartão Porto Seguro', 'CARTAO', 25, 28);
 
 -- 17. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100900', 'Conta Corrente Bruno', 'CORRENTE', NULL, 9);
+VALUES ('100900', 'Conta Corrente Bruno', 'CORRENTE', NULL, 29);
 
 -- 18. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200900', 'Cartão Digio', 'CARTAO', 8, 9);
+VALUES ('200900', 'Cartão Digio', 'CARTAO', 8, 29);
 
 -- 19. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('101000', 'Conta Camila Ferreira', 'CORRENTE', NULL, 10);
+VALUES ('101000', 'Conta Camila Ferreira', 'CORRENTE', NULL, 30);
 
 -- 20. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('201000', 'Cartão Pan', 'CARTAO', 17, 10);
+VALUES ('201000', 'Cartão Pan', 'CARTAO', 17, 30);
 
 -- 21. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('101100', 'Conta Corrente Fernanda', 'CORRENTE', NULL, 6);
+VALUES ('101100', 'Conta Corrente Fernanda', 'CORRENTE', NULL, 26);
 
 -- 22. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('201100', 'Cartão Black João Silva', 'CARTAO', 22, 1);
+VALUES ('201100', 'Cartão Black João Silva', 'CARTAO', 22, 21);
 
 -- 23. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('101200', 'Conta Empresarial Maria', 'CORRENTE', NULL, 2);
+VALUES ('101200', 'Conta Empresarial Maria', 'CORRENTE', NULL, 22);
 
 -- 24. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('201200', 'Cartão Credicard Zero', 'CARTAO', 9, 3);
+VALUES ('201200', 'Cartão Credicard Zero', 'CARTAO', 9, 23);
 
 -- 25. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('101300', 'Conta Premium Paulo', 'CORRENTE', NULL, 5);
+VALUES ('101300', 'Conta Premium Paulo', 'CORRENTE', NULL, 25);
 
 
 
-
+-------------------------------------------------------
 /* 25 Transações de exemplo com enum Movimento (DEBITO/CREDITO) */
 INSERT INTO transacao (data, descricao, valor, movimento, categoria_id, conta_id) VALUES
 ('2025-08-01', 'Venda de produtos', 1500.00, 'CREDITO', 1, 1),
@@ -155,4 +160,25 @@ INSERT INTO transacao (data, descricao, valor, movimento, categoria_id, conta_id
 ('2025-09-01', 'Venda de serviços premium', 2500.00, 'CREDITO', 9, 1),
 ('2025-09-02', 'Pagamento de manutenção', 350.00, 'DEBITO', 10, 1),
 ('2025-09-03', 'Recebimento de comissão de vendas', 800.00, 'CREDITO', 11, 1),
-('2025-09-04', 'Pagamento aluguel escritório', 1000.00, 'DEBITO', 12, 1);
+('2025-09-04', 'Pagamento aluguel escritório', 1000.00, 'DEBITO', 12, 1),
+('2025-09-05', 'Venda de produtos importados', 1800.00, 'CREDITO', 13, 2),
+('2025-09-06', 'Compra de matérias-primas', 600.00, 'DEBITO', 14, 2),
+('2025-09-07', 'Recebimento de serviço contratado', 1200.00, 'CREDITO', 15, 2),
+('2025-09-08', 'Pagamento de transporte', 300.00, 'DEBITO', 16, 2),
+('2025-09-09', 'Investimento em fundo multimercado', 2000.00, 'CREDITO', 17, 3),
+('2025-09-10', 'Compra de equipamentos de informática', 900.00, 'DEBITO', 18, 3),
+('2025-09-11', 'Venda de produtos promocionais', 1500.00, 'CREDITO', 19, 3),
+('2025-09-12', 'Despesas de marketing', 400.00, 'DEBITO', 20, 3),
+('2025-09-13', 'Recebimento de cliente VIP', 2500.00, 'CREDITO', 1, 4),
+('2025-09-14', 'Pagamento de impostos estaduais', 800.00, 'DEBITO', 2, 4),
+('2025-09-15', 'Venda de serviço online', 1800.00, 'CREDITO', 3, 4),
+('2025-09-16', 'Pagamento de fornecedores internacionais', 1200.00, 'DEBITO', 4, 4),
+('2025-09-17', 'Investimento em ações de tecnologia', 2200.00, 'CREDITO', 5, 5),
+('2025-09-18', 'Compra de material de escritório', 300.00, 'DEBITO', 6, 5),
+('2025-09-19', 'Recebimento de comissão', 700.00, 'CREDITO', 7, 5),
+('2025-09-20', 'Pagamento de serviços terceirizados', 450.00, 'DEBITO', 8, 5),
+('2025-09-21', 'Venda de produtos de alto valor', 3200.00, 'CREDITO', 9, 6),
+('2025-09-22', 'Pagamento folha de pagamento', 2700.00, 'DEBITO', 10, 6),
+('2025-09-23', 'Recebimento de clientes corporativos', 2500.00, 'CREDITO', 11, 6),
+('2025-09-24', 'Pagamento de aluguel de galpão', 1200.00, 'DEBITO', 12, 6);
+;

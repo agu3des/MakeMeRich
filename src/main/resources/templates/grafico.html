@@ -2,119 +2,218 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/principal}" 
       th:with="titulo='Resumo de Contas'">
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
-  <body>
-    <div layout:fragment="conteudo" class="container py-4">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    canvas#grafico,
+    canvas#graficoOrcamento {
+      width: 100% !important; 
+      max-width: 800px;        
+      height: 400px;           
+      margin: auto;
+      display: block;
+    }
 
-      <div th:if="${conta != null}">
-        <h2 class="mb-4 text-success">Resumo da Conta - <span th:text="${conta.numero}"></span></h2>
+    .card-body canvas {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
 
-        <!-- Filtro por ano -->
-        <form method="get" th:action="@{/grafico/{idConta}(idConta=${conta.id})}" class="d-flex align-items-center gap-2 mb-4">
-        <label for="ano" class="form-label mb-0 me-2 text-success fw-semibold">Ano:</label>
-        <select id="ano" name="ano" class="form-select form-select-sm" style="width: 100px;">
-          <option th:each="ano : ${anosDisponiveis}"
-                  th:value="${ano}" 
-                  th:text="${ano}" 
-                  th:selected="${ano == anoSelecionado}">
-          </option>
-        </select>
-        <button type="submit" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">
-          <i class="bi bi-bar-chart-line"></i> Atualizar
-        </button>
-      </form>
+<body>
+  <div layout:fragment="conteudo" class="container py-4">
 
-      <!-- Gráfico combinado -->
-      <div th:if="${conta != null}" class="card border-success shadow-sm mb-4">
-        <div class="card-header bg-success text-white fw-bold">
-          Evolução Mensal: Total e Qtd. de Transações
-        </div>
-        <div class="card-body">
-          <canvas id="grafico" height="100"></canvas>
-        </div>
+    <h2 class="mb-4 text-success">Resumo da Conta - <span th:text="${conta.numero}"></span></h2>
+
+    <!-- Filtro por ano -->
+    <form method="get" th:action="@{/grafico/{idConta}(idConta=${conta.id})}" class="d-flex align-items-center gap-2 mb-4">
+      <label for="ano" class="form-label mb-0 me-2 text-success fw-semibold">Ano:</label>
+      <select id="ano" name="ano" class="form-select form-select-sm" style="width: 100px;">
+        <option th:each="ano : ${anosDisponiveis}"
+                th:value="${ano}" 
+                th:text="${ano}" 
+                th:selected="${ano == anoSelecionado}">
+        </option>
+      </select>
+      <button type="submit" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">
+        <i class="bi bi-bar-chart-line"></i> Atualizar
+      </button>
+    </form>
+
+    <!-- Gráfico de Orçamento Consolidado -->
+    <div class="card card-budget">
+      <div class="card-header card-header-budget bg-success text-white fw-bold">
+        <i class="bi bi-bar-chart-line me-2"></i>
+        Gráfico Consolidado do Orçamento
       </div>
+      <div class="card-body">
+        <canvas id="graficoOrcamento"></canvas>
+      </div>
+    </div>
 
-      <script th:inline="javascript">
-        const labels = /*[[${labels}]]*/ [];
-        const valores = /*[[${valores}]]*/ []; // Totais mensais (R$)
-        const qtdTransacoes = /*[[${qtdTransacoes}]]*/ []; // Qtd de transações por mês
+    <script th:inline="javascript">
+      const orcamentoLabels = /*[[${orcamentoLabels}]]*/ [];
+      const entradaMensal = /*[[${entradaMensal}]]*/ [];
+      const saidaMensal = /*[[${saidaMensal}]]*/ [];
+      const investimentoMensal = /*[[${investimentoMensal}]]*/ [];
+      const saldoMensal = /*[[${saldoMensal}]]*/ [];
 
-        const ctx = document.getElementById('grafico').getContext('2d');
-        new Chart(ctx, {
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                type: 'bar',
-                label: 'Qtd. de Transações',
-                data: qtdTransacoes,
-                backgroundColor: 'rgba(25, 135, 84, 0.5)',
-                borderColor: 'rgba(25, 135, 84, 1)',
-                borderWidth: 1,
-                yAxisID: 'yTransacoes'
-              },
-              {
-                type: 'line',
-                label: 'Total Mensal (R$)',
-                data: valores,
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                tension: 0.4,
-                fill: false,
-                yAxisID: 'yValores'
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { display: true },
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    if (context.dataset.label.includes('Total')) {
-                      return context.dataset.label + ': R$ ' + context.parsed.y.toFixed(2);
-                    }
-                    return context.dataset.label + ': ' + context.parsed.y;
-                  }
+      const ctxOrcamento = document.getElementById('graficoOrcamento').getContext('2d');
+      new Chart(ctxOrcamento, {
+        type: 'bar',
+        data: {
+          labels: orcamentoLabels,
+          datasets: [
+            {
+              label: 'Entrada',
+              data: entradaMensal,
+              backgroundColor: 'rgba(40, 167, 69, 0.6)',
+              borderColor: 'rgba(40, 167, 69, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Saida',
+              data: saidaMensal,
+              backgroundColor: 'rgba(220, 53, 69, 0.6)',
+              borderColor: 'rgba(220, 53, 69, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Investimento',
+              data: investimentoMensal,
+              backgroundColor: 'rgba(255, 215, 0, 0.6)',
+              borderColor: 'rgba(255, 215, 69, 1)',
+              borderWidth: 1
+            },
+            {
+              type: 'line',
+              label: 'Saldo',
+              data: saldoMensal,
+              borderColor: 'rgba(23, 162, 184, 1)',
+              backgroundColor: 'rgba(23, 162, 184, 0.3)',
+              tension: 0.3,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: true },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.dataset.label + ': R$ ' + context.parsed.y.toFixed(2);
                 }
               }
-            },
-            scales: {
-              yTransacoes: {
-                type: 'linear',
-                position: 'left',
-                beginAtZero: true,
-                title: { display: true, text: 'Qtd. de Transações' }
-              },
-              yValores: {
-                type: 'linear',
-                position: 'right',
-                beginAtZero: true,
-                title: { display: true, text: 'Total (R$)' },
-                ticks: {
-                  callback: function(value) {
-                    return 'R$ ' + value.toFixed(2);
-                  }
-                },
-                grid: {
-                  drawOnChartArea: false // para não sobrepor as grades
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return 'R$ ' + value.toFixed(2);
                 }
               }
             }
           }
-        });
-      </script>
+        }
+      });
+    </script>
 
-      <!-- Botão voltar -->
-      <div class="mt-3">
-        <a th:href="@{/contas}" class="btn btn-secondary">
-          <i class="bi bi-arrow-left"></i> 
-        </a>
+    <!-- Gráfico combinado -->
+    <div class="card border-success shadow-sm mb-4">
+      <div class="card-header bg-success text-white fw-bold">
+        Evolução Mensal: Total e Qtd. de Transações
       </div>
-
+      <div class="card-body">
+        <canvas id="grafico"></canvas>
+      </div>
     </div>
-  </body>
+
+    <script th:inline="javascript">
+      const labels = /*[[${labels}]]*/ [];
+      const valores = /*[[${valores}]]*/ [];
+      const qtdTransacoes = /*[[${qtdTransacoes}]]*/ [];
+
+      const ctx = document.getElementById('grafico').getContext('2d');
+      new Chart(ctx, {
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              type: 'bar',
+              label: 'Qtd. de Transações',
+              data: qtdTransacoes,
+              backgroundColor: 'rgba(25, 135, 84, 0.5)',
+              borderColor: 'rgba(25, 135, 84, 1)',
+              borderWidth: 1,
+              yAxisID: 'yTransacoes'
+            },
+            {
+              type: 'line',
+              label: 'Total Mensal (R$)',
+              data: valores,
+              borderColor: 'rgba(255, 99, 132, 1)',
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              tension: 0.4,
+              fill: false,
+              yAxisID: 'yValores'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: true },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  if (context.dataset.label.includes('Total')) {
+                    return context.dataset.label + ': R$ ' + context.parsed.y.toFixed(2);
+                  }
+                  return context.dataset.label + ': ' + context.parsed.y;
+                }
+              }
+            }
+          },
+          scales: {
+            yTransacoes: {
+              type: 'linear',
+              position: 'left',
+              beginAtZero: true,
+              title: { display: true, text: 'Qtd. de Transações' }
+            },
+            yValores: {
+              type: 'linear',
+              position: 'right',
+              beginAtZero: true,
+              title: { display: true, text: 'Total (R$)' },
+              ticks: {
+                callback: function(value) {
+                  return 'R$ ' + value.toFixed(2);
+                }
+              },
+              grid: {
+                drawOnChartArea: false
+              }
+            }
+          }
+        }
+      });
+    </script>
+
+
+    <!-- Botão voltar -->
+    <div class="mt-3">
+      <a th:href="@{/contas}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> 
+      </a>
+    </div>
+
+  </div>
+</body>
 </html>
