@@ -2,11 +2,15 @@
       layout:decorate="~{layouts/principal}" 
       th:with="titulo='Transação em conta'">
   <body>
-    <div layout:fragment="conteudo">
+
+    <div layout:fragment="conteudo" class="container py-4">
+
       <div th:if="${conta == null}">
-        <form th:action="@{/transacoes/selecionar}" method="POST">
-          <div th:if="${session.usuario != null and session.usuario.admin}">
-            <label for="nuConta">Selecione uma conta</label>
+        <form th:action="@{/transacoes/selecionar}" method="POST" 
+              class="card border-success shadow-sm p-4 mb-4">
+          <!-- Admin -->
+          <div th:if="${todasContas != null}" class="mb-3">
+            <label for="nuConta" class="form-label fw-semibold text-success">Selecione uma conta</label>
             <select id="nuConta" name="nuConta" class="form-select" required>
               <option value="">-- Escolha uma conta --</option>
               <option th:each="c : ${todasContas}"
@@ -14,8 +18,10 @@
                       th:text="${c.numero + ' - ' + c.descricao}"></option>
             </select>
           </div>
-          <div th:if="${session.usuario != null and !session.usuario.admin}">
-            <label for="nuConta">Selecione uma conta</label>
+
+          <!-- Cliente -->
+          <div th:if="${contasDoUsuario != null}" class="mb-3">
+            <label for="nuConta" class="form-label fw-semibold text-success">Selecione uma conta</label>
             <select id="nuConta" name="nuConta" class="form-select" required>
               <option value="">-- Escolha uma conta --</option>
               <option th:each="c : ${contasDoUsuario}"
@@ -24,76 +30,201 @@
             </select>
           </div>
           
-          <br />
-          <button type="submit" class="btn btn-primary" name="acao" value="nova">Nova Transação</button>
-          <button type="submit" class="btn btn-secondary" name="acao" value="listar">Listar Transações</button>
+          <div class="d-flex gap-2 justify-content-end">
+            <button type="submit" class="btn btn-success" name="acao" value="nova">
+              <i class="bi bi-plus-circle me-1"></i>
+              <span class="d-none d-sm-inline">Nova transação</span>
+            </button>
+            <button type="submit" class="btn btn-secondary" name="acao" value="listar">
+              <i class="bi bi-list-ul me-1"></i> 
+            </button>
+          </div>
         </form>
         
         <p th:if="${mensagem != null}" class="alert alert-warning" th:text="${mensagem}"></p>
         
-        <!-- Mensagem quando não há contas -->
-        <div th:if="${(session.usuario.admin and (todasContas == null or todasContas.empty)) or 
-                      (!session.usuario.admin and (contasDoUsuario == null or contasDoUsuario.empty))}"
-             class="alert alert-info">
+        <div th:if="${(todasContas != null and todasContas.empty) or (contasDoUsuario != null and contasDoUsuario.empty)}"
+            class="alert alert-info text-center fw-semibold">
           Nenhuma conta disponível
         </div>
       </div>
+
       <div th:if="${conta != null}">
-        <ul>
-          <li><strong>Conta:</strong> <span th:text="${conta.numero}"></span></li>
-          <li><strong>Correntista:</strong> <span th:text="${conta.correntista.nome}"></span></li>
-          <li><strong>Descrição:</strong> <span th:text="${conta.descricao}"></span></li>
-          <li><strong>Tipo:</strong> <span th:text="${conta.tipo}"></span></li>
-          <li><strong>Dia Fechamento:</strong> <span th:text="${conta.diaFechamento} ?: '–'"></span></li>
-        </ul>
+        <dl class="row mb-4 border rounded border-success p-4 shadow-sm bg-light">
+          <dt class="col-sm-4 col-md-3 text-success fw-bold d-flex align-items-center">
+            <i class="bi bi-credit-card-2-front me-2 fs-5"></i> Conta:
+          </dt>
+          <dd class="col-sm-8 col-md-9 fs-5" th:text="${conta.numero}"></dd>
 
-        <div style="margin-bottom: 30px"></div>
+          <dt class="col-sm-4 col-md-3 text-success fw-bold d-flex align-items-center">
+            <i class="bi bi-person-circle me-2 fs-5"></i> Correntista:
+          </dt>
+          <dd class="col-sm-8 col-md-9 fs-5" th:text="${conta.correntista.nome}"></dd>
 
-        <h4 th:text="${transacao.id != null} ? 'Editar Transação' : 'Nova Transação'"></h4>
+          <dt class="col-sm-4 col-md-3 text-success fw-bold d-flex align-items-center">
+            <i class="bi bi-card-text me-2 fs-5"></i> Descrição:
+          </dt>
+          <dd class="col-sm-8 col-md-9 fs-5" th:text="${conta.descricao}"></dd>
+
+          <dt class="col-sm-4 col-md-3 text-success fw-bold d-flex align-items-center">
+            <i class="bi bi-tags me-2 fs-5"></i> Tipo:
+          </dt>
+          <dd class="col-sm-8 col-md-9 fs-5" th:text="${conta.tipo}"></dd>
+
+          <dt class="col-sm-4 col-md-3 text-success fw-bold d-flex align-items-center">
+            <i class="bi bi-calendar-check me-2 fs-5"></i> Dia Fechamento:
+          </dt>
+          <dd class="col-sm-8 col-md-9 fs-5" th:text="${conta.diaFechamento} ?: '–'"></dd>
+        </dl>
+
+        <h4 class="text-success mb-3" th:text="${transacao.id != null} ? 'Editar Transação' : 'Nova Transação'"></h4>
         <hr class="mb-4" />
 
-        <form th:action="@{/transacoes/salvar}" method="POST" th:object="${transacao}">
+        <form th:action="@{/transacoes/salvar}" method="POST" th:object="${transacao}" 
+              class="card border-success shadow-sm p-4">
           <input type="hidden" th:field="*{id}" />
           <input type="hidden" th:field="*{conta.id}" name="idConta" />
 
-          <div class="form-group mb-2">
-            <label for="descricao">Descrição</label>
-            <input type="text" class="form-control" th:field="*{descricao}" required />
+          <div class="mb-3">
+            <label for="descricao" class="form-label fw-semibold">Descrição</label>
+            <input type="text" id="descricao" class="form-control form-control-lg" th:field="*{descricao}" required />
+            <p th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="alert alert-danger"></p>
           </div>
 
-          <div class="form-group mb-2">
-            <label for="data">Data</label>
-            <input type="date" class="form-control" th:field="*{data}" required />
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="data" class="form-label fw-semibold">Data</label>
+              <input type="date" id="data" class="form-control form-control-lg" th:field="*{data}" required />
+              <p th:if="${#fields.hasErrors('data')}" th:errors="*{data}" class="alert alert-danger"></p>
+            </div>
+            <div class="col-md-6">
+              <label for="valor" class="form-label fw-semibold">Valor</label>
+              <input type="number" id="valor" class="form-control form-control-lg" th:field="*{valor}" step="0.01" required />
+              <p th:if="${#fields.hasErrors('valor')}" th:errors="*{valor}" class="alert alert-danger"></p>
+            </div>
           </div>
 
-          <div class="form-group mb-2">
-            <label for="valor">Valor</label>
-            <input type="number" class="form-control" th:field="*{valor}" step="0.01" required />
-          </div>
-
-          <div class="form-group mb-2">
-            <label for="movimento">Movimento</label>
-            <select class="form-control" th:field="*{movimento}">
+          <div class="mb-3">
+            <label for="movimento" class="form-label fw-semibold">Movimento</label>
+            <select id="movimento" class="form-select form-select-lg" th:field="*{movimento}">
+              <option value="">-- Selecione --</option>
               <option value="CREDITO">Crédito</option>
               <option value="DEBITO">Débito</option>
             </select>
+            <p th:if="${#fields.hasErrors('movimento')}" th:errors="*{movimento}" class="alert alert-danger"></p>
           </div>
 
-          <div class="form-group mb-2">
-            <label for="categoria">Categoria</label>
-            <select class="form-select" th:field="*{categoria.id}">
+          <div class="mb-3">
+            <label class="form-label fw-semibold d-block">Natureza</label>
+            <input type="hidden" name="categoria.natureza" id="natureza" th:value="*{categoria.natureza}" />
+            <button type="button" id="btnEntrada" class="btn btn-outline-success me-2" onclick="selecionarNatureza('ENTRADA')">Entrada</button>
+            <button type="button" id="btnSaida" class="btn btn-outline-danger" onclick="selecionarNatureza('SAIDA')">Saída</button>
+            <p th:if="${#fields.hasErrors('categoria.natureza')}" th:errors="*{categoria.natureza}" class="alert alert-danger"></p>
+          </div>
+
+          <div class="mb-4">
+            <label for="categoria" class="form-label fw-semibold">Categoria</label>
+            <select id="categoria" class="form-select form-select-lg" name="categoria.id" th:value="*{categoria.id}">
+              <option value="">-- Selecione --</option>
               <option th:each="cat : ${categorias}" 
                       th:value="${cat.id}" 
-                      th:text="${cat.nome} + ' (' + ${cat.natureza} + ')'"></option>
+                      th:text="${cat.nome}" 
+                      th:attr="data-natureza=${cat.natureza}"
+                      th:selected="${transacao.categoria != null and transacao.categoria.id == cat.id}">
+              </option>
             </select>
+            <p th:if="${#fields.hasErrors('categoria.id')}" th:errors="*{categoria.id}" class="alert alert-danger"></p>
           </div>
 
-          <button type="submit" class="btn btn-primary">Salvar Transação</button>
-          
-          <a th:href="@{/transacoes/listar/{id}(id=${transacao.conta.id})}" 
-             class="btn btn-secondary ms-2">Cancelar</a>
+
+          <div class="d-flex gap-2 justify-content-end">
+            <button type="submit" class="btn btn-success btn-lg">
+              <i class="bi bi-save me-1"></i> 
+            </button>
+            <a th:href="@{/transacoes/listar/{id}(id=${transacao.conta.id})}" 
+              class="btn btn-secondary btn-lg">
+              <i class="bi bi-x-circle me-1"></i> 
+            </a>
+          </div>
         </form>
       </div>
     </div>
+
+    <div layout:fragment="scripts">
+      <script>
+        function selecionarNatureza(naturezaSelecionada) {
+          document.getElementById('natureza').value = naturezaSelecionada;
+
+          const btnEntrada = document.getElementById('btnEntrada');
+          const btnSaida = document.getElementById('btnSaida');
+
+          if (naturezaSelecionada === 'ENTRADA') {
+            btnEntrada.classList.remove('btn-outline-success');
+            btnEntrada.classList.add('btn-success');
+            btnSaida.classList.remove('btn-danger');
+            btnSaida.classList.add('btn-outline-danger');
+          } else {
+            btnSaida.classList.remove('btn-outline-danger');
+            btnSaida.classList.add('btn-danger');
+            btnEntrada.classList.remove('btn-success');
+            btnEntrada.classList.add('btn-outline-success');
+          }
+
+          const select = document.getElementById('categoria');
+          let firstVisibleIndex = -1;
+
+          for (let i = 0; i < select.options.length; i++) {
+            const option = select.options[i];
+            const optionNatureza = option.getAttribute('data-natureza');
+            if (optionNatureza === naturezaSelecionada) {
+              option.hidden = false;
+              if (firstVisibleIndex === -1) {
+                firstVisibleIndex = i;
+              }
+            } else {
+              option.hidden = true;
+            }
+          }
+
+          // Só altera selectedIndex se o valor atual não estiver visível
+          const selectedValue = select.value;
+          let selectedOptionVisible = false;
+
+          for (let i = 0; i < select.options.length; i++) {
+            const option = select.options[i];
+            if (!option.hidden && option.value === selectedValue) {
+              selectedOptionVisible = true;
+              break;
+            }
+          }
+
+          if (selectedOptionVisible) {
+            select.disabled = false;
+          } else if (firstVisibleIndex >= 0) {
+            select.selectedIndex = firstVisibleIndex;
+            select.disabled = false;
+          } else {
+            select.selectedIndex = -1;
+            select.disabled = true;
+          }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const select = document.getElementById('categoria');
+          for (let i = 0; i < select.options.length; i++) {
+            select.options[i].hidden = true;
+          }
+
+          const natureza = document.getElementById('natureza').value;
+          if (natureza) {
+            selecionarNatureza(natureza);
+          } else {
+            select.disabled = true;
+          }
+        });
+      </script>
+
+    </div>
+
   </body>
 </html>
