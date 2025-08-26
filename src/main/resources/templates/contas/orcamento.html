@@ -180,16 +180,15 @@
                     th:selected="${anoOp == ano}"></option>
           </select>
 
-          <div class="me-2" th:if="${isAdmin} ? (${exibirSelecaoCorrentista} ?: false) : false">
+          <div class="me-2" th:if="${correntistas != null}">
             <label class="form-label text-success fw-semibold">Correntista:</label>
           </div>
           <select name="correntistaId" class="form-select form-select-year me-2"
-                  th:if="${isAdmin} ? (${exibirSelecaoCorrentista} ?: false) : false" style="min-width: 200px;">
+                  th:if="${correntistas != null}" style="min-width: 200px;">
             <option th:each="c : ${correntistas}"
                     th:value="${c.id}"
                     th:text="${c.nome}"
-                    th:selected="${correntistaSelecionado != null} ? ${c.id == correntistaSelecionado.id} : false">
-        </option>
+                    th:selected="${c.id == correntistaSelecionado?.id}">
             </option>
           </select>
           <button type="submit" class="btn btn-refresh">
@@ -209,11 +208,6 @@
               <i class="bi bi-graph-up me-2"></i>
               Orçamento Anual Consolidado
             </h4>
-            <div th:if="${correntistaSelecionado != null}">
-              <small class="text-white fw-light">
-                Correntista: <span th:text="${correntistaSelecionado.nome}"></span>
-              </small>
-            </div>
           </div>
         </div>
 

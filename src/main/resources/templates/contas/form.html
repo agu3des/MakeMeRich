@@ -1,55 +1,57 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/principal}" th:with="titulo='Nova Conta'">
   <body>
-    <div layout:fragment="conteudo">
+    <div layout:fragment="conteudo" class="container py-4" style="max-width: 600px;">
       <form th:action="@{/contas}" method="POST" th:object="${conta}">
         <input type="hidden" th:field="*{id}" />
 
-        <div class="form-group mx-sm-3 mb-2">
-          <label for="numero">Número</label>
-          <input type="text" th:field="*{numero}" class="form-control" />
+        <div class="mb-3">
+          <label for="numero" class="form-label text-success fw-semibold">Número</label>
+          <input type="text" id="numero" th:field="*{numero}" class="form-control border border-success" required />
+          <p th:if="${#fields.hasErrors('numero')}" th:errors="*{numero}" class="alert alert-danger"></p>
         </div>
 
-        <div class="form-group mx-sm-3 mb-2">
-          <label for="descricao">Descrição</label>
-          <input type="text" th:field="*{descricao}" class="form-control" />
+        <div class="mb-3">
+          <label for="descricao" class="form-label text-success fw-semibold">Descrição</label>
+          <input type="text" id="descricao" th:field="*{descricao}" class="form-control border border-success" required />
+          <p th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="alert alert-danger"></p>
         </div>
 
-        <div class="form-group mx-sm-3 mb-2">
-          <label for="tipo">Tipo de Conta</label>
-          <select th:field="*{tipo}" class="form-select" id="tipoConta" onchange="exibirOuOcultarFechamento()">
+        <div class="mb-3">
+          <label for="tipoConta" class="form-label text-success fw-semibold">Tipo de Conta</label>
+          <select id="tipoConta" th:field="*{tipo}" class="form-select border border-success" onchange="ajustarCampoFechamento()" required>
             <option value="">-- Selecione --</option>
             <option value="CORRENTE" th:selected="${conta.tipo == 'CORRENTE'}">Corrente</option>
             <option value="CARTAO" th:selected="${conta.tipo == 'CARTAO'}">Cartão</option>
+            <p th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}" class="alert alert-danger"></p>
           </select>
         </div>
 
-        <div class="form-group mx-sm-3 mb-2">
-          <label for="diaFechamento">Dia do Fechamento</label>
-          <input type="number" th:field="*{diaFechamento}" class="form-control" min="1" max="31"
-            id="diaFechamento"
-            th:disabled="${conta.tipo == null or conta.tipo == 'CORRENTE'}" />
+        <div class="mb-3">
+          <label for="diaFechamento" class="form-label text-success fw-semibold">Dia do Fechamento</label>
+          <input type="number" id="diaFechamento" th:field="*{diaFechamento}" class="form-control border border-success" min="1" max="31" th:disabled="${conta.tipo == null or conta.tipo == 'CORRENTE'}" />  
         </div>
-        
- <!-- Campo de correntista modificado -->
+
         <div th:if="${session.usuario.admin}">
-          <div class="form-group mx-sm-3 mb-2">
-            <label for="correntista.id">Correntista</label>
-            <select th:field="*{correntista.id}" class="form-select">
-              <option th:each="cor : ${correntistaItems}" th:value="${cor.id}" th:label="${cor.nome}"></option>
+          <div class="mb-3">
+            <label for="correntistaSelect" class="form-label text-success fw-semibold">Correntista</label>
+            <select id="correntistaSelect" th:field="*{correntista.id}" class="form-select border border-success" required>
+              <option th:each="cor : ${correntistaItems}" th:value="${cor.id}" th:text="${cor.nome}"></option>
             </select>
           </div>
         </div>
 
         <div th:unless="${session.usuario.admin}">
           <input type="hidden" th:field="*{correntista.id}" th:value="${session.usuario.id}" />
-          <div class="form-group mx-sm-3 mb-2">
-            <label>Correntista</label>
-            <p class="form-control-static" th:text="${session.usuario.nome}"></p>
+          <div class="mb-3">
+            <label class="form-label text-success fw-semibold">Correntista</label>
+            <p class="form-control-plaintext" th:text="${session.usuario.nome}"></p>
           </div>
         </div>
-        
-        <button type="submit" class="btn btn-primary">Salvar</button>
-        <a class="btn btn-secondary" th:href="@{/contas}">Cancelar</a>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-success flex-fill">Salvar</button>
+          <a class="btn btn-outline-secondary flex-fill" th:href="@{/contas}">Cancelar</a>
+        </div>
       </form>
 
       <script>
