@@ -1,30 +1,42 @@
 <!doctype html5>
 <html lang="pt_BR" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head>
-    <meta th:insert="~{/fragments/head(${titulo})}">
-</head>
+    <head>
+        <meta th:insert="~{/fragments/head(${titulo})}">
+    </head>
 
-<body>
-    <div th:replace="~{/fragments/cabecalho}"></div>
+    <body>
+        <div th:replace="~{/fragments/cabecalho}"></div>
+        <div class="d-flex">
+            
+            <div class="container py-5">
+                <!-- Sombra verde atrás -->
+                <div class="position-relative w-100">
+                    <div class="position-absolute top-0 start-0 w-100 h-100 rounded-3 shadow-lg"
+                        style="background-color: rgba(40, 167, 69, 0.12); filter: blur(8px); z-index: 0;"></div>
 
-    <div class="container">
-        <div th:text="${mensagem}" th:if="${mensagem ne null}" class="alert alert-success"></div>
+                    <!-- Card principal -->
+                    <div class="card border-success shadow-lg position-relative"
+                        style="z-index: 1; width: 100%; min-height: 400px; /* ajuste a altura mínima conforme desejar */">
+                        <div class="card-header bg-white border-success text-success fw-bold">
+                            <span th:text="${titulo}">Título do card</span>
+                        </div>
+                        <div class="card-body">
+                            <div th:text="${mensagem}" th:if="${mensagem ne null}" class="alert alert-success"></div>
 
-        <div class="card">
-            <div class="card-header">
-                <span th:text="${titulo}">Título do card</span>
-            </div>
-            <div class="card-body">
-
-                <div layout:fragment="conteudo">
-                    <!-- Corpo da página entra aqui -->
-                    <h1>Conteúdo não definido para o layout!</h1>
+                            <div layout:fragment="conteudo">
+                                <!-- Corpo da página entra aqui -->
+                                <h1>Conteúdo não definido para o layout!</h1>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-        </div>
-    </div>
-</body>
-</html>
+            <div layout:fragment="scripts"></div>
 
+        </div>
+            
+
+    </body>
+
+</html>
