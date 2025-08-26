@@ -23,103 +23,103 @@ INSERT INTO correntista (nome, email, ativo, username) VALUES
 
 -- 1. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100111', 'Conta Corrente Principal', 'CORRENTE', NULL, 21);
+VALUES ('100111', 'Conta Corrente Principal', 'CORRENTE', NULL, 1);
 
 -- 2. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200000', 'Cartão Nubank', 'CARTAO', 10, 21);
+VALUES ('200000', 'Cartão Nubank', 'CARTAO', 10, 1);
 
 -- 3. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100234', 'Conta Universitária', 'CORRENTE', NULL, 22);
+VALUES ('100234', 'Conta Universitária', 'CORRENTE', NULL, 2);
 
 -- 4. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200245', 'Cartão Inter', 'CARTAO', 15, 22);
+VALUES ('200245', 'Cartão Inter', 'CARTAO', 15, 2);
 
 -- 5. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100355', 'Conta Poupança Família', 'CORRENTE', NULL, 23);
+VALUES ('100355', 'Conta Poupança Família', 'CORRENTE', NULL, 3);
 
 -- 6. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200365', 'Cartão Itaú Gold', 'CARTAO', 20, 23);
+VALUES ('200365', 'Cartão Itaú Gold', 'CARTAO', 20, 3);
 
 -- 7. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100477', 'Conta Empresa', 'CORRENTE', NULL, 24);
+VALUES ('100477', 'Conta Empresa', 'CORRENTE', NULL, 4);
 
 -- 8. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200488', 'Cartão C6 Bank', 'CARTAO', 12, 24);
+VALUES ('200488', 'Cartão C6 Bank', 'CARTAO', 12, 4);
 
 -- 9. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100599', 'Conta Conjunta', 'CORRENTE', NULL, 25);
+VALUES ('100599', 'Conta Conjunta', 'CORRENTE', NULL, 5);
 
 -- 10. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200500', 'Cartão Bradesco Prime', 'CARTAO', 28, 25);
+VALUES ('200500', 'Cartão Bradesco Prime', 'CARTAO', 28, 5);
 
 -- 11. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100610', 'Conta Digital Nubank', 'CORRENTE', NULL, 26);
+VALUES ('100610', 'Conta Digital Nubank', 'CORRENTE', NULL, 6);
 
 -- 12. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200600', 'Cartão Santander Free', 'CARTAO', 5, 26);
+VALUES ('200600', 'Cartão Santander Free', 'CARTAO', 5, 6);
 
 -- 13. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100700', 'Conta Poupança Ricardo', 'CORRENTE', NULL, 27);
+VALUES ('100700', 'Conta Poupança Ricardo', 'CORRENTE', NULL, 7);
 
 -- 14. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200700', 'Cartão XP Visa', 'CARTAO', 18, 27);
+VALUES ('200700', 'Cartão XP Visa', 'CARTAO', 18, 7);
 
 -- 15. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100800', 'Conta Salário Juliana', 'CORRENTE', NULL, 28);
+VALUES ('100800', 'Conta Salário Juliana', 'CORRENTE', NULL, 8);
 
 -- 16. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200800', 'Cartão Porto Seguro', 'CARTAO', 25, 28);
+VALUES ('200800', 'Cartão Porto Seguro', 'CARTAO', 25, 8);
 
 -- 17. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('100900', 'Conta Corrente Bruno', 'CORRENTE', NULL, 29);
+VALUES ('100900', 'Conta Corrente Bruno', 'CORRENTE', NULL, 9);
 
 -- 18. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('200900', 'Cartão Digio', 'CARTAO', 8, 29);
+VALUES ('200900', 'Cartão Digio', 'CARTAO', 8, 9);
 
 -- 19. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('101000', 'Conta Camila Ferreira', 'CORRENTE', NULL, 30);
+VALUES ('101000', 'Conta Camila Ferreira', 'CORRENTE', NULL, 10);
 
 -- 20. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('201000', 'Cartão Pan', 'CARTAO', 17, 30);
+VALUES ('201000', 'Cartão Pan', 'CARTAO', 17, 10);
 
 -- 21. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('101100', 'Conta Corrente Fernanda', 'CORRENTE', NULL, 26);
+VALUES ('101100', 'Conta Corrente Fernanda', 'CORRENTE', NULL, 6);
 
 -- 22. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('201100', 'Cartão Black João Silva', 'CARTAO', 22, 21);
+VALUES ('201100', 'Cartão Black João Silva', 'CARTAO', 22, 1);
 
 -- 23. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('101200', 'Conta Empresarial Maria', 'CORRENTE', NULL, 22);
+VALUES ('101200', 'Conta Empresarial Maria', 'CORRENTE', NULL, 2);
 
 -- 24. Conta Cartão
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('201200', 'Cartão Credicard Zero', 'CARTAO', 9, 23);
+VALUES ('201200', 'Cartão Credicard Zero', 'CARTAO', 9, 3);
 
 -- 25. Conta Corrente
 INSERT INTO conta (numero, descricao, tipo, dia_fechamento, id_correntista)
-VALUES ('101300', 'Conta Premium Paulo', 'CORRENTE', NULL, 25);
+VALUES ('101300', 'Conta Premium Paulo', 'CORRENTE', NULL, 5);
 
 
 

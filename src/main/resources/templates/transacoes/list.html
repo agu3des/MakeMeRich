@@ -108,9 +108,9 @@
               <td
                   th:text="${#numbers.formatCurrency(transacao.valor)}"
                   th:classappend="
-                      ${transacao.categoria != null} ?
-                          (${transacao.categoria.natureza.name() == 'SAIDA'} ? 'text-danger' : 
-                          (${transacao.categoria.natureza.name() == 'ENTRADA'} ? 'text-success' : '')) 
+                      ${transacao.movimento != null} ?
+                          (${transacao.movimento.name() == 'DEBITO'} ? 'text-danger' : 
+                          (${transacao.movimento.name() == 'CREDITO'} ? 'text-success' : '')) 
                       : ''">
               </td>
               <td th:text="${transacao.movimento}"></td>
