@@ -1,25 +1,43 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/principal}" th:with="titulo='Novo Correntista'">
-<body>
-    <div layout:fragment="conteudo">
+  <body>
+    <div layout:fragment="conteudo" class="container py-4" style="max-width: 500px;">
       <form th:action="@{/correntistas}" method="POST" th:object="${correntista}">
         <input type="hidden" th:field="*{id}" />
-        <label for="nome" class="form-label">Nome:</label>
-        <input type="text" class="form-control" th:field="*{nome}" />
 
-        <label for="nome" class="form-label">Senha:</label>
-        <input type="password" class="form-control" th:field="*{senha}" />
-
-        <label for="nome" class="form-label">Email:</label>
-        <input type="text" class="form-control" th:field="*{email}" /><br />
-
-        <div class="form-check">
-          <label class="form-check-label" for="admin">Administador ?</label>
-          <input type="checkbox" class="form-check-input" th:field="*{admin}" />
+        <div class="mb-3">
+          <label for="nome" class="form-label text-success fw-semibold">Nome:</label>
+          <input type="text" id="nome" class="form-control border border-success" th:field="*{nome}" required />
+          <p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="alert alert-danger"></p>
         </div>
-        <br />
 
-        <input type="submit" class="btn btn-primary" value="Salvar" />
-        <a class="btn btn-secondary" th:href="@{/correntistas}">Cancelar</a>
+        <div class="mb-3">
+          <div class="form-group mx-sm-3 mb-2">
+            <label for="user" class="form-label">Usuário:</label>
+            <select th:field="*{user}" class="form-select" id="user">
+            <option value="">-- Selecione --</option>
+            <option th:each="u : ${users}" th:value="${u.username}" th:text="${u.username}" 
+            th:selected="${u.username==user}"></option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label text-success fw-semibold">Email:</label>
+          <input type="email" id="email" class="form-control border border-success" th:field="*{email}" required />
+          <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger"></p>
+        </div>
+
+        <div class="form-check mb-4">
+          <!-- <input type="checkbox" id="admin" class="form-check-input" th:field="*{admin}" 
+          th:checked="${correntista.user.authorities.?[authority=='ROLE_ADMIN'].size() > 0}" /> -->
+          <input type="checkbox" id="admin" class="form-check-input" th:field="*{user.admin}"/>
+          <label for="admin" class="form-check-label text-success fw-semibold">Administrador?</label>
+        </div>
+
+        <div class="d-flex gap-2">
+          <input type="submit" class="btn btn-success flex-fill" value="Salvar" />
+          <a class="btn btn-outline-secondary flex-fill" th:href="@{/correntistas}">Cancelar</a>
+        </div>
       </form>
     </div>
   </body>
