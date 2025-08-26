@@ -2,75 +2,192 @@
       layout:decorate="~{layouts/principal}" 
       th:with="titulo='Transações na conta'">
   <body>
-    <div layout:fragment="conteudo">
-      <ul>
-        <li>
-          Conta:
-          <span th:text="${conta.numero}"></span>
-        </li>
-        <li>
-          Correntista:
-          <span th:text="${conta.correntista.nome}"></span>
-        </li>
-        <li>
-          Dia fechamento:
-          <span th:text="${conta.diaFechamento} ?: '–'"></span>
-        </li>
-      </ul>
+    <div layout:fragment="conteudo" class="container py-4">
 
-      <div style="margin-bottom: 30px"></div>
-
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Descricao</th>
-            <th>Data</th>
-            <th style="text-align: right">Valor</th>
-            <th>Movimento</th>
-            <th>Categoria</th>
-            <th>Comentários</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="transacao : ${conta.transacoes}">
-            <td th:text="${transacao.id}"></td>
-            <td th:text="${transacao.descricao}"></td>
-            <td th:text="${transacao.data != null} ? ${#temporals.format(transacao.data, 'dd/MM/yyyy')} : '-'"></td>
-            <td style="text-align: right" 
-                th:text="${#numbers.formatCurrency(transacao.valor)}"></td>
-            <td th:text="${transacao.movimento}"></td>
-            <td th:text="${transacao.categoria != null} ? ${transacao.categoria.nome} : '—'"></td>
-            <td>
-              <div th:if="${#lists.isEmpty(transacao.comentarios)}">
-                Sem comentários
-              </div>
-              <ul th:if="${!#lists.isEmpty(transacao.comentarios)}" style="padding-left: 1rem;">
-                <li th:each="comentario : ${transacao.comentarios}">
-                  <span th:text="${comentario.texto}"></span>
-                </li>
-              </ul>
-            </td>
-            <td>
-              <a th:href="@{/comentarios/listar/{id}(id=${transacao.id})}" 
-                 class="btn btn-sm btn-info mt-2">Comentários</a>
-              <a th:href="@{/transacoes/editar/{id}(id=${transacao.id})}" 
-                 class="btn btn-sm btn-warning mt-2">Editar</a>
-            </td>
-          </tr>
-
-          <tr>
-            <th colspan="7" style="font-weight: bold; background-color: darkgray; text-align: right;">Total</th>
-            <td style="font-weight: bold; background-color: darkgray; text-align: center;" 
-                th:text="${conta.saldo != null} ? ${#numbers.formatCurrency(conta.saldo)} : 'R$ 0,00'"></td>
-          </tr>
-        </tbody>
-      </table>
-      
-      <div class="mt-3">
-        <a th:href="@{/contas}" class="btn btn-secondary">Voltar para Contas</a>
+      <!-- Informações da conta -->
+      <div class="card border-success shadow-sm mb-4">
+        <div class="card-body">
+          <ul class="list-unstyled mb-0 ps-0">
+            <li class="mb-2 d-flex align-items-center">
+              <i class="bi bi-credit-card-2-front text-success me-2 fs-5"></i>
+              <strong class="text-success me-1">Número:</strong>
+              <span th:text="${conta.numero}"></span>
+            </li>
+            <li class="mb-2 d-flex align-items-center">
+              <i class="bi bi-file-text text-success me-2 fs-5"></i> <!-- ícone de documento para descrição -->
+              <strong class="text-success me-1">Conta:</strong>
+              <span th:text="${conta.descricao}"></span>
+            </li>
+            <li class="mb-2 d-flex align-items-center">
+              <i class="bi bi-person-fill text-success me-2 fs-5"></i>
+              <strong class="text-success me-1">Correntista:</strong>
+              <span th:text="${conta.correntista.nome}"></span>
+            </li>
+            <li class="d-flex align-items-center">
+              <i class="bi bi-calendar3 text-success me-2 fs-5"></i>
+              <strong class="text-success me-1">Dia fechamento:</strong>
+              <span th:text="${conta.diaFechamento} ?: '–'"></span>
+            </li>
+          </ul>
+        </div>
       </div>
+      <a th:href="@{/transacoes/nova/{id}(id=${conta.id})}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> 
+        <span class="d-none d-sm-inline">Nova transação</span>
+      </a> 
+      </br>
+
+      <div th:if="${mensagemErro}" class="alert alert-danger" role="alert">
+          <span th:text="${mensagemErro}"></span>
+      </div>
+      <div class="d-flex justify-content-between mb-3 pt-2">
+        <form method="get" 
+              th:action="@{/transacoes/filtrar/{idConta}(idConta=${conta.id})}" 
+              class="mb-4 p-3 d-flex align-items-center gap-3 rounded border shadow-sm"
+              style="max-width: 500px;">
+          
+          <label for="dataInicio" class="form-label mb-0 fw-semibold text-success">
+            De:
+          </label>
+          <input type="date" 
+                 id="dataInicio" 
+                 name="dataInicio" 
+                 class="form-control form-control-sm border-success" 
+                 th:value="${dataInicio}" 
+                 required 
+                 style="max-width: 160px;">
+          
+          <label for="dataFim" class="form-label mb-0 fw-semibold text-success">
+            Até:
+          </label>
+          <input type="date" 
+                 id="dataFim" 
+                 name="dataFim" 
+                 class="form-control form-control-sm border-success" 
+                 th:value="${dataFim}" 
+                 required 
+                 style="max-width: 160px;">
+
+          <!-- Mantém paginação -->
+          <input type="hidden" name="page" th:value="${pagina.number + 1}" />
+          <input type="hidden" name="size" th:value="${pagina.size}" />
+          
+          <button type="submit" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-funnel"></i> 
+          </button>
+        </form>
+      
+        <form method="get"
+              th:action="@{/grafico/{idConta}(idConta=${conta.id})}"
+              class="d-flex align-items-center gap-2 mb-3">
+          <input type="hidden" name="ano" th:value="${anoSelecionado}" />
+          <button type="submit" class="btn btn-outline-secondary btn-sm btn-icon-sm">
+            <i class="bi bi-bar-chart-line"></i> 
+          </button>
+        </form>
+      </div>
+
+      <div class="table-responsive shadow-sm rounded border border-success">
+        <table class="table table-striped table-hover align-middle mb-0">
+          <thead class="table-success">
+            <tr>
+              <th>ID</th>
+              <th>Descrição</th>
+              <th>Data</th>
+              <th>Valor</th>
+              <th>Movimento</th>
+              <th>Categoria</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="transacao : ${transacoes}">
+              <td th:text="${transacao.id}"></td>
+              <td th:text="${transacao.descricao}"></td>
+              <td th:text="${transacao.data != null} ? ${#temporals.format(transacao.data, 'dd/MM/yyyy')} : '-'"></td>
+              <td
+                  th:text="${#numbers.formatCurrency(transacao.valor)}"
+                  th:classappend="
+                      ${transacao.categoria != null} ?
+                          (${transacao.categoria.natureza.name() == 'SAIDA'} ? 'text-danger' : 
+                          (${transacao.categoria.natureza.name() == 'ENTRADA'} ? 'text-success' : '')) 
+                      : ''">
+              </td>
+              <td th:text="${transacao.movimento}"></td>
+              <td>
+                <span class="badge rounded-pill bg-success text-center" 
+                      th:text="${transacao.categoria != null} ? ${transacao.categoria.nome} : '—'">
+                </span>
+              </td>
+              <td class="text-nowrap">
+                <div class="d-flex gap-1">
+                  <a th:href="@{/comentarios/listar/{id}(id=${transacao.id})}" 
+                    class="btn btn-outline-info btn-sm btn-icon-sm position-relative" 
+                    
+                    title="Comentários">
+                    <i class="bi bi-chat-dots">
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger px-1 py-0 small"
+                          style="font-size: 0.7rem;"
+                          th:if="${#lists.size(transacao.comentarios) > 0}"
+                          th:text="${#lists.size(transacao.comentarios)}">
+                      </span>
+                    </i>
+                  </a>
+                  <a th:href="@{/transacoes/editar/{id}(id=${transacao.id})}" 
+                    class="btn btn-outline-warning btn-sm btn-icon-sm" 
+                    title="Editar">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+                  <form th:action="@{/transacoes/delete/{id}(id=${transacao.id})}" method="post" 
+                        onsubmit="return confirm('Deseja realmente excluir?');">
+                    <button type="submit" class="btn btn-outline-danger btn-sm btn-icon-sm">
+                      <i class="bi bi-trash"></i> 
+                    </button>
+                  </form>
+
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <th colspan="6" class="text-start fw-bold bg-success text-white">
+                Total
+              </th>
+              <td class="fw-bold bg-success text-white text-start" 
+                  th:text="${totalPeriodo != null} ? ${#numbers.formatCurrency(totalPeriodo)} : ${#numbers.formatCurrency(conta.saldo)}">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Paginador -->
+        <nav aria-label="Page navigation">
+          <ul class="pagination">
+            <li class="page-item" th:classappend="${pagina.first} ? 'disabled'">
+              <a class="page-link" th:href="@{/transacoes/filtrar/{idConta}(idConta=${conta.id}, dataInicio=${dataInicio}, dataFim=${dataFim}, page=${pagina.number},size=${pagina.size})}">Anterior</a>
+            </li>
+        
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, pagina.totalPages)}"
+                >
+              <a class="page-link" th:href="@{/transacoes/filtrar/{idConta}(idConta=${conta.id}, dataInicio=${dataInicio}, dataFim=${dataFim}, page=${i},size=${pagina.size})}"
+                th:classappend="${pagina.number + 1 == i} ? 'active'"
+                th:text="${i}">1</a>
+            </li>
+        
+            <li class="page-item" th:classappend="${pagina.last} ? 'disabled'">
+              <a class="page-link" th:href="@{/transacoes/filtrar/{idConta}(idConta=${conta.id}, dataInicio=${dataInicio}, dataFim=${dataFim}, page=${pagina.number + 2},size=${pagina.size})}">Próximo</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      </br>
+
+      <a th:href="@{/contas}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> 
+        <span class="d-none d-sm-inline"></span>
+      </a>
+
+
     </div>
   </body>
 </html>
