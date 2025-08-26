@@ -48,24 +48,70 @@ public class MakeMeRichSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        // Alguns usuários básicos, criados quando da 1a. execução da aplicaçao
-        UserDetails sagan = User.withUsername("sagan").password(passwordEncoder().encode("cosmos")).roles("CLIENTE").build();
-        UserDetails turing = User.withUsername("turing").password(passwordEncoder().encode("enignma")).roles("CLIENTE").build();
-        UserDetails ada = User.withUsername("ada").password(passwordEncoder().encode("firstcoder")).roles("CLIENTE").build();
-        UserDetails admin = User.withUsername("admin").password(passwordEncoder().encode("admin")).roles("CLIENTE", "ADMIN").build();
+    // @Bean
+    // public UserDetailsService userDetailsService() {
+    //     // Alguns usuários básicos, criados quando da 1a. execução da aplicaçao
+    //     UserDetails sagan = User.withUsername("sagan").password(passwordEncoder().encode("cosmos")).roles("CLIENTE").build();
+    //     UserDetails turing = User.withUsername("turing").password(passwordEncoder().encode("enignma")).roles("CLIENTE").build();
+    //     UserDetails ada = User.withUsername("ada").password(passwordEncoder().encode("firstcoder")).roles("CLIENTE").build();
+    //     UserDetails admin = User.withUsername("admin").password(passwordEncoder().encode("admin")).roles("CLIENTE", "ADMIN").build();
 
-        // Evita duplicação dos usuários no banco
-        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        if (!users.userExists(admin.getUsername())) {
-            users.createUser(sagan);
-            users.createUser(turing);
-            users.createUser(ada);
-            users.createUser(admin);
+    //     // Evita duplicação dos usuários no banco
+    //     JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+    //     if (!users.userExists(admin.getUsername())) {
+    //         users.createUser(sagan);
+    //         users.createUser(turing);
+    //         users.createUser(ada);
+    //         users.createUser(admin);
+    //     }
+    //     return users;
+    // }
+
+    @Bean
+public UserDetailsService userDetailsService() {
+    JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+
+    // Lista de usuários iniciais
+    UserDetails[] initialUsers = new UserDetails[] {
+        User.withUsername("sagan").password(passwordEncoder().encode("cosmos")).roles("CLIENTE").build(),
+        User.withUsername("turing").password(passwordEncoder().encode("enigma")).roles("CLIENTE").build(),
+        User.withUsername("ada").password(passwordEncoder().encode("firstcoder")).roles("CLIENTE").build(),
+        User.withUsername("admin").password(passwordEncoder().encode("admin")).roles("CLIENTE", "ADMIN").build(),
+
+        // ---- novos usuários ----
+        User.withUsername("user1").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user2").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user3").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user4").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user5").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user6").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user7").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user8").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user9").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user10").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user11").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user12").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user13").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user14").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user15").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user16").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user17").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user18").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user19").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user20").password(passwordEncoder().encode("123")).roles("CLIENTE").build(),
+        User.withUsername("user21").password(passwordEncoder().encode("123")).roles("CLIENTE").build()
+    };
+
+    // Criar apenas se ainda não existir
+    for (UserDetails u : initialUsers) {
+        if (!users.userExists(u.getUsername())) {
+            users.createUser(u);
         }
-        return users;
     }
+
+    return users;
+}
+
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
