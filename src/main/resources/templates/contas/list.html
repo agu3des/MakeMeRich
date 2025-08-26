@@ -5,8 +5,7 @@
     <div layout:fragment="conteudo">
       <div class="container py-3">
         <!-- Botão Nova Conta -->
-        <form th:action="@{/contas/form}" method="GET" 
-              th:if="${session.usuario != null}" class="mb-3">
+        <form th:action="@{/contas/form}" method="GET" class="mb-3">
           <button class="btn btn-success" type="submit">
             <i class="bi bi-plus-circle"></i> 
             <span class="d-none d-sm-inline">Nova Conta</span>
@@ -50,14 +49,17 @@
                   </td>
                   <td>
                   <div class="d-flex flex-wrap gap-1">
-                    <a th:href="@{/transacoes/listar/{id}(id=${conta.id})}" class="btn btn-outline-success btn-sm btn-icon-sm">
+                    <a th:href="@{/transacoes/listar/{id}(id=${conta.id})}" class="btn btn-outline-success btn-sm btn-icon-sm"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Ver transações">
                       <i class="bi bi-list-ul"></i> 
                     </a>
-                    <a th:href="@{/transacoes/nova/{id}(id=${conta.id})}" class="btn btn-outline-primary btn-sm btn-icon-sm"> 
+                    <a th:href="@{/transacoes/nova/{id}(id=${conta.id})}" class="btn btn-outline-primary btn-sm btn-icon-sm"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Nova transação"> 
                       <i class="bi bi-plus-circle"></i> 
                     </a>
-                    <a th:href="@{/contas/orcamento/anual}" 
-                      class="btn btn-outline-info btn-sm btn-icon-sm">
+                    <a th:href="@{/contas/orcamento/anual(correntistaId=${conta.correntista.id}, exibirSelecaoCorrentista=false)}" 
+                      class="btn btn-outline-info btn-sm btn-icon-sm"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Orçamento anual">
                       <i class="bi bi-pie-chart"></i>
                     </a>
 
@@ -65,22 +67,23 @@
                           th:action="@{/grafico/{idConta}(idConta=${conta.id})}"
                           class="d-flex align-items-center gap-2 mb-3">
                       <input type="hidden" name="ano" th:value="${anoSelecionado}" />
-                      <button type="submit" class="btn btn-outline-secondary btn-sm btn-icon-sm">
+                      <button type="submit" class="btn btn-outline-secondary btn-sm btn-icon-sm"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Gráfico de gastos">
                         <i class="bi bi-bar-chart-line"></i> 
                       </button>
                     </form>
 
                     <a th:href="@{/contas/editar/{id}(id=${conta.id})}" 
                       class="btn btn-outline-warning btn-sm btn-icon-sm" 
-                      title="Editar"
-                      th:if="${session.usuario != null and session.usuario.admin}">
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"
+                      >
                       <i class="bi bi-pencil"></i>
                     </a>
                     <!-- E
                      xclusão apenas para admin -->
-                    <form th:action="@{/contas/{id}/delete(id=${conta.id})}" method="GET" 
-                          th:if="${session.usuario != null and session.usuario.admin}">
-                      <button type="submit" class="btn btn-outline-danger btn-sm btn-icon-sm">
+                    <form th:action="@{/contas/{id}/delete(id=${conta.id})}" method="GET">
+                      <button type="submit" class="btn btn-outline-danger btn-sm btn-icon-sm"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir conta">
                         <i class="bi bi-trash"></i> 
                       </button>
                     </form>

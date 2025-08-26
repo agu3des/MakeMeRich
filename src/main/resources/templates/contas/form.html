@@ -2,7 +2,7 @@
   <body>
     <div layout:fragment="conteudo" class="container py-4" style="max-width: 600px;">
       <form th:action="@{/contas}" method="POST" th:object="${conta}">
-        <input type="hidden" th:field="*{id}" />
+        <input class="form-control" type="hidden" th:field="*{id}" />
 
         <div class="mb-3">
           <label for="numero" class="form-label text-success fw-semibold">Número</label>
@@ -31,7 +31,7 @@
           <input type="number" id="diaFechamento" th:field="*{diaFechamento}" class="form-control border border-success" min="1" max="31" th:disabled="${conta.tipo == null or conta.tipo == 'CORRENTE'}" />  
         </div>
 
-        <div th:if="${session.usuario.admin}">
+        <div th:if="${isAdmin}">
           <div class="mb-3">
             <label for="correntistaSelect" class="form-label text-success fw-semibold">Correntista</label>
             <select id="correntistaSelect" th:field="*{correntista.id}" class="form-select border border-success" required>
@@ -40,11 +40,11 @@
           </div>
         </div>
 
-        <div th:unless="${session.usuario.admin}">
-          <input type="hidden" th:field="*{correntista.id}" th:value="${session.usuario.id}" />
+        <div th:unless="${isAdmin}">
+          <input type="hidden" th:field="*{correntista.id}" th:value="${conta.correntista.id}" />
           <div class="mb-3">
             <label class="form-label text-success fw-semibold">Correntista</label>
-            <p class="form-control-plaintext" th:text="${session.usuario.nome}"></p>
+            <p class="form-control-plaintext" th:text="${conta.correntista.nome}"></p>
           </div>
         </div>
 
